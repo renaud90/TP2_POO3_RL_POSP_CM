@@ -9,6 +9,10 @@ namespace Bibliotheque_LIPAJOLI.Data
         public DbSet<Usager> Usagers { get; set; }
         public DbSet<Emprunt> Emprunts { get; set; }
 
+        public BibliothequeContext(DbContextOptions<BibliothequeContext> options) : base(options)
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Livre>().ToTable("Livre");
