@@ -11,7 +11,7 @@ namespace Bibliotheque_LIPAJOLI.Models
 
     public class Usager
     {
-        [Required] 
+        [Required, Key] 
         public string NumAbonne { get; set; }
         [Required]
         public string Nom { get; set; }
