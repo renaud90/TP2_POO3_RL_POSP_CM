@@ -13,7 +13,7 @@ namespace Bibliotheque_LIPAJOLI.Models
         public string Categorie { get; set; }
         public int Quantite { get; set; }
         public double Prix { get; set; }
-        public List<string> Auteurs { get; set; }
+        public string Auteurs { get; set; }
     }
 }
 
