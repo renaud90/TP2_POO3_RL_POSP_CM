@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bibliotheque_LIPAJOLI.Models
 {
@@ -22,8 +23,9 @@ namespace Bibliotheque_LIPAJOLI.Models
         public string Email { get; set; }
         public int Defaillance { get; set; } = 0;
 
+        public List<Emprunt> Emprunts { get; set; }
+
         public bool PeutEmprunter => Defaillance < 3;
     }
 
- 
 }
