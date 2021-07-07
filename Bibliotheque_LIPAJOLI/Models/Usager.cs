@@ -23,7 +23,7 @@ namespace Bibliotheque_LIPAJOLI.Models
         public string Email { get; set; }
         public int Defaillance { get; set; } = 0;
 
-        public List<Emprunt> Emprunts { get; set; }
+        public ICollection<Emprunt> Emprunts { get; set; }
 
         public bool PeutEmprunter => Defaillance < 3;
     }

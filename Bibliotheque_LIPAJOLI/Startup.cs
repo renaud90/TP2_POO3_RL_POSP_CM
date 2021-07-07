@@ -23,6 +23,8 @@ namespace Bibliotheque_LIPAJOLI
             services.AddDbContext<BibliothequeContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
             services.AddControllersWithViews();
         }
 
