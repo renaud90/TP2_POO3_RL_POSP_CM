@@ -39,6 +39,7 @@ namespace Bibliotheque_LIPAJOLI.Data
             var usagers = new Usager[]
             {
                 
+
             };
 
             contexte.Usagers.AddRange(usagers);

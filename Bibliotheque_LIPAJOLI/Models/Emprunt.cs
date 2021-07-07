@@ -11,6 +11,8 @@ namespace Bibliotheque_LIPAJOLI.Models
         public string CodeLivre { get; set; }
         [Required, ForeignKey("Usager")]
         public string NumAbonne { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Required]
         public DateTime DateEmprunt { get; set; }
         public DateTime DateRetour { get; set; }
