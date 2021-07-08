@@ -39,7 +39,7 @@ namespace Bibliotheque_LIPAJOLI.Models
         [RegularExpression(@"^[0-9]*$"/*, ErrorMessage = "Ce champ ne doit comporter que des chiffres" //*/)]
         public int Defaillance { get; set; } = 0;
 
-        public List<Emprunt> Emprunts { get; set; }
+        public ICollection<Emprunt> Emprunts { get; set; }
 
         public bool PeutEmprunter => Defaillance < 3;
 
