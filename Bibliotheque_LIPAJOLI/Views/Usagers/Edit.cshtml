@@ -1,12 +1,12 @@
 ﻿@model Bibliotheque_LIPAJOLI.Models.Usager
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Modifier";
 }
 
-<h1>Edit</h1>
+<h1>Modifier</h1>
 
-<h4>Usager</h4>
+<h4>le profil de l'usager</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -33,20 +33,20 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="Defaillance" class="control-label"></label>
                 <input asp-for="Defaillance" class="form-control" />
                 <span asp-validation-for="Defaillance" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Sauvegarder" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Retour à la liste des usagers</a>
 </div>
 
 @section Scripts {

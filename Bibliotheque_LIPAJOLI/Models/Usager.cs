@@ -35,7 +35,7 @@ namespace Bibliotheque_LIPAJOLI.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Display(Name = "Défaillance(s)", Prompt = "0")]
+        [Display(Name = "Nombre de défaillance(s)", Prompt = "0")]
         [RegularExpression(@"^[0-9]*$"/*, ErrorMessage = "Ce champ ne doit comporter que des chiffres" //*/)]
         public int Defaillance { get; set; } = 0;
 

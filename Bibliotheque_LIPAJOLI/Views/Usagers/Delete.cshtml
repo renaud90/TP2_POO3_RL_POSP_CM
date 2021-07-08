@@ -1,14 +1,14 @@
 ﻿@model Bibliotheque_LIPAJOLI.Models.Usager
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Suprimer";
 }
 
-<h1>Delete</h1>
+<h1>SUPRESSION</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Êtes-vous certain(e) de vouloir supprimer définitivement le profil de cet usager?</h3>
 <div>
-    <h4>Usager</h4>
+    <h4> @Html.DisplayFor(model => model.Nom), @Html.DisplayFor(model => model.Prenom)</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -45,7 +45,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="NumAbonne" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Suprimer" class="btn btn-danger" /> |
+        <a asp-action="Index">Retour à la liste des usagers</a>
     </form>
 </div>
