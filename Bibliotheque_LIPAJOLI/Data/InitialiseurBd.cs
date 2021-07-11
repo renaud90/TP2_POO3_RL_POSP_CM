@@ -20,13 +20,13 @@ namespace Bibliotheque_LIPAJOLI.Data
             {
                 new Livre
                 {
-                    Titre = "Python pour les nuls 3e Édition", Isbn10 = "2412053146", Isbn13 = "9782412053140", 
+                    Titre = "Python pour les nuls 3e Édition", Isbn10 = "2-41205-3-146", Isbn13 = "978-2-41205-3-140", 
                     Auteurs = ObtenirValeursAuHasardDe(auteurs), Categorie = "Informatique", CodeLivre = "INF001",
                     Prix = 41.95
                 },
                 new Livre
                 {
-                    Titre = "Éloquence de la sardine", Isbn10 = "2290238783", Isbn13 = "9782290238783",
+                    Titre = "Éloquence de la sardine", Isbn10 = "2-29023-8-783", Isbn13 = "978-2-29023-8-783",
                     Auteurs = ObtenirValeursAuHasardDe(auteurs), Categorie = "Sciences", CodeLivre = "SCI001",
                     Prix = 13.95
                 }
