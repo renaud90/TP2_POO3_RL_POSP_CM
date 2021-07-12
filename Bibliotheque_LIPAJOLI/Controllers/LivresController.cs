@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Bibliotheque_LIPAJOLI.Data;
 using Bibliotheque_LIPAJOLI.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Bibliotheque_LIPAJOLI.Controllers
 {
@@ -59,8 +60,28 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CodeLivre,Isbn10,Isbn13,Titre,Categorie,Quantite,Prix,Auteurs")] Livre livre)
+        public async Task<IActionResult> Create([Bind("CodeLivre,Isbn10,Isbn13,Titre,Quantite,Prix")] Livre livre, string categorie, string[] auteurs)
         {
+            if(categorie == null)
+            {
+                ModelState.AddModelError("Categorie", "Ce champ est requis.");
+                return View(livre);
+            }
+            if (auteurs.Length == 0)
+            {
+                ModelState.AddModelError("Auteurs", "Ce champ est requis.");
+                return View(livre);
+            }
+            livre.Categorie = categorie;
+            foreach(var auteur in auteurs)
+            {
+                livre.Auteurs += auteur;
+                livre.Auteurs += ",";
+            }
+            //Enlever la virgule à la fin
+            livre.Auteurs.Remove(livre.Auteurs.Length - 1);
+
+            
             if (ModelState.IsValid)
             {
                 _context.Add(livre);

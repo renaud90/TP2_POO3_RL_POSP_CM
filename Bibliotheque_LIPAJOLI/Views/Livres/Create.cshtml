@@ -9,7 +9,7 @@
 <h4>Livre</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -32,35 +32,52 @@
                 <input asp-for="Titre" class="form-control" />
                 <span asp-validation-for="Titre" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Categorie" class="control-label"></label>
-                <input asp-for="Categorie" class="form-control" />
+            <div class="form-group"> Catégorie <br />
+                    @{
+                        foreach (var cat in ViewBag.categories)
+                        {
+                                <span class="col-3" >
+                                    <label for="@cat" class="control-label">@cat
+                                        <input type="radio" name="categorie" value="@cat" class="form-control">
+                                    </label>
+                                </span>
+                                    
+                        }
+                    }
                 <span asp-validation-for="Categorie" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Quantite" class="control-label"></label>
-                <input asp-for="Quantite" class="form-control" />
+                <input type="number" asp-for="Quantite" class="form-control" />
                 <span asp-validation-for="Quantite" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Prix" class="control-label"></label>
-                <input asp-for="Prix" class="form-control" />
+                <input type="number" asp-for="Prix" class="form-control" />
                 <span asp-validation-for="Prix" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Auteurs" class="control-label"></label>
-                <input asp-for="Auteurs" class="form-control" />
+            <div class="form-group"> Auteurs  <br />         
+                    @{ foreach (var auteur in ViewBag.auteurs)
+                        {
+                        <span class="col-3">
+                            <label for="@auteur" class="control-label">@auteur
+                                <input type="checkbox" name="auteurs" value="@auteur" class="form-control">
+                            </label>
+                        </span>
+
+                    }
+                    }
                 <span asp-validation-for="Auteurs" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Ajouter" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Retour à la liste des livres</a>
 </div>
 
 @section Scripts {
