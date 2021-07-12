@@ -1,8 +1,44 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="jumbotron text-center">
+    <h1 class="display-4">Bibliothèque LIPAJOLI</h1>
+    <h3>
+        Prenez la passion de lire à coeur
+    </h3>
+</div>
+<div class="row text-center">
+    <div class="col-md-4 d-flex flex-column justify-content-around">
+        <h2>Sélection de livres</h2>
+        <br />
+        <p>
+            Si vous voulez parcourir l'étendu de notre sélection de livre, cliquez sur le bouton ci-dessous.
+        </p>
+        <br />
+        <p>
+            <a class="btn btn-secondary" asp-controller="Livres" asp-action="Index">Parcourir la librairie &raquo;</a>
+        </p>
+    </div>
+    <div class="col-md-4 d-flex flex-column justify-content-around">
+        <h2>Liste des usagers</h2>
+        <br />
+        <p>
+            Pour voir la liste des usagers de notre bibliothèque, cliquez sur le bouton ci-dessous.
+        </p>
+        <br />
+        <p>
+            <a class="btn btn-secondary" asp-controller="Livres" asp-action="Index">Parcourir les usagers &raquo;</a>
+        </p>
+    </div>
+    <div class="col-md-4 d-flex flex-column justify-content-around">
+        <h2>Liste des emprunts</h2>
+        <br/>
+        <p>
+            Pour voir la liste de tous les emprunts effectués par nos usagers, cliquez sur le bouton ci-dessous.
+        </p>
+        <br/>
+        <p>
+            <a class="btn btn-secondary" asp-controller="Livres" asp-action="Index">Parcourir les emprunts &raquo;</a>
+        </p>
+    </div>
 </div>
