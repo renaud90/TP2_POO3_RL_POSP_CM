@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bibliotheque_LIPAJOLI.Data;
 using Bibliotheque_LIPAJOLI.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Bibliotheque_LIPAJOLI.Controllers
 {
     public class LivresController : Controller
     {
         private readonly BibliothequeContext _context;
+        private readonly IConfiguration _config;
 
-        public LivresController(BibliothequeContext context)
+        public LivresController(BibliothequeContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         // GET: Livres
@@ -46,6 +49,8 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // GET: Livres/Create
         public IActionResult Create()
         {
+            ViewBag.categories = _config.GetSection("Bibliotheque:Categories").Get<List<string>>();
+            ViewBag.auteurs = _config.GetSection("Bibliotheque:Auteurs").Get<List<string>>();
             return View();
         }
 

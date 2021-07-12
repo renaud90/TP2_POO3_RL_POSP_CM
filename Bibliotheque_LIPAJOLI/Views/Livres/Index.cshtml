@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<Bibliotheque_LIPAJOLI.Models.Livre>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "LIPAJOLI - Livres";
 }
 
-<h1>Index</h1>
+<h1>Bibliothèque LIPAJOLI - Liste des livres</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Ajouter un livre à la bibliothèque</a>
 </p>
 <table class="table">
     <thead>
@@ -61,9 +61,9 @@
                 @Html.DisplayFor(modelItem => item.Auteurs)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CodeLivre">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CodeLivre">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CodeLivre">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.CodeLivre">Modifier</a> |
+                <a asp-action="Details" asp-route-id="@item.CodeLivre">Détails</a> |
+                <a asp-action="Delete" asp-route-id="@item.CodeLivre">Effacer</a>
             </td>
         </tr>
 }
