@@ -1,22 +1,17 @@
 ﻿@model Bibliotheque_LIPAJOLI.Models.Usager
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Créer";
 }
 
-<h1>Create</h1>
+<h1>Créer</h1>
 
-<h4>Usager</h4>
+<h4>le profil d'un nouvel usager</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NumAbonne" class="control-label"></label>
-                <input asp-for="NumAbonne" class="form-control" />
-                <span asp-validation-for="NumAbonne" class="text-danger"></span>
-            </div>
             <div class="form-group">
                 <label asp-for="Nom" class="control-label"></label>
                 <input asp-for="Nom" class="form-control" />
@@ -29,9 +24,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Statut" class="control-label"></label>
-                <input asp-for="Statut" class="form-control" />
-                <span asp-validation-for="Statut" class="text-danger"></span>
-                @*<select asp-for="Statut" class="form-control" asp-items="@Html.DropDownListFor(m=>m.Statut,ViewBag.EnumList as SelectList)"></select>*@
+                <select asp-for="Statut" class="form-control" asp-items="ViewBag.Statut"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
@@ -39,19 +32,14 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Defaillance" class="control-label"></label>
-                <input asp-for="Defaillance" class="form-control" />
-                <span asp-validation-for="Defaillance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Créer" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Retour à la liste des usagers</a>
 </div>
 
 @section Scripts {

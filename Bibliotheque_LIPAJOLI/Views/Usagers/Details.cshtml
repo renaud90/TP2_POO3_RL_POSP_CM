@@ -7,13 +7,13 @@
 <h1>Détails</h1>
 
 <div>
-    <h4>de du profil de l'usager</h4>
+    <h4>du profil de l'usager</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Nom)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-10"  @*@if(Model.PeutEmprunter == false){ style="color:blue" }*@>
             @Html.DisplayFor(model => model.Nom)
         </dd>
         <dt class = "col-sm-2">

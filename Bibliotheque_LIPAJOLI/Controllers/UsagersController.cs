@@ -20,13 +20,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         }
 
         // GET: Usagers
-        //public async Task<IActionResult> Index()
-        //{
-        //    var usagers = _context.Usagers
-        //         .Include(c => c.Emprunts)
-        //         .AsNoTracking();
-        //    return View(await usagers.ToListAsync());
-        //}
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -34,38 +27,38 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             ViewData["DefaillanceSortParm"] = sortOrder == "def" ? "def_desc" : "def";
             ViewData["CurrentFilter"] = searchString;
 
-            var students = from s in _context.Usagers
+            var usagers = from s in _context.Usagers
                            select s;
 
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                students = students.Where(s => s.Nom.Contains(searchString)
+                usagers = usagers.Where(s => s.Nom.Contains(searchString)
                                        || s.Prenom.Contains(searchString) || s.Nom.ToLower().Contains(searchString) || s.Prenom.ToLower().Contains(searchString));
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    students = students.OrderByDescending(s => s.Nom);
+                    usagers = usagers.OrderByDescending(s => s.Nom);
                     break;
                 case "statut":
-                    students = students.OrderBy(s => s.Statut);
+                    usagers = usagers.OrderBy(s => s.Statut);
                     break;
                 case "statut_desc":
-                    students = students.OrderByDescending(s => s.Statut);
+                    usagers = usagers.OrderByDescending(s => s.Statut);
                     break;
                 case "def_desc":
-                    students = students.OrderByDescending(s => s.Defaillance);
+                    usagers = usagers.OrderByDescending(s => s.Defaillance);
                     break;
                 case "def":
-                    students = students.OrderBy(s => s.Defaillance);
+                    usagers = usagers.OrderBy(s => s.Defaillance);
                     break;
                 default:
-                    students = students.OrderBy(s => s.Nom);
+                    usagers = usagers.OrderBy(s => s.Nom);
                     break;
             }
-            return View(await students.AsNoTracking().ToListAsync());
+            return View(await usagers.AsNoTracking().ToListAsync());
         }
 
         // GET: Usagers/Details/5
@@ -90,6 +83,9 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // GET: Usagers/Create
         public IActionResult Create()
         {
+
+            ViewData["Statut"] = new SelectList(_context.Usagers, "Statut", "Statut");
+
             return View();
         }
 
@@ -98,14 +94,41 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("NumAbonne,Nom,Prenom,Statut,Email,Defaillance")] Usager usager)
+        public async Task<IActionResult> Create([Bind("Nom,Prenom,Statut,Email")] Usager usager)
         {
-            if (ModelState.IsValid)
+            var dernierUsager = _context.Usagers.OrderByDescending(c => c.NumAbonne).FirstOrDefault();
+
+            if (dernierUsager == null)
             {
-                _context.Add(usager);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                usager.NumAbonne = ObtenirLettresCodeUsager(usager) + "0001";
             }
+            else
+            {
+                int codeChiffres = Convert.ToInt32(dernierUsager.NumAbonne.Substring(4, 4)) + 1;
+
+                string codeChiffresString = codeChiffres.ToString("D3");
+
+                usager.NumAbonne = ObtenirLettresCodeUsager(usager) + codeChiffresString;
+            }
+
+            ViewData["Statut"] = new SelectList(_context.Usagers, "Statut", "Statut", usager.Statut);
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(usager);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Échoue de la savegarde des données. Veuillez réessayer, si le probleme persiste " +
+                    "contacter l'administrateur de votre système.");
+            }
+
+
             return View(usager);
         }
 
@@ -122,6 +145,8 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["Statut"] = new SelectList(_context.Usagers, "Statut", "Statut", usager.Statut);
             return View(usager);
         }
 
@@ -157,11 +182,30 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Statut"] = new SelectList(_context.Usagers, "Statut", "Statut", usager.Statut);
             return View(usager);
         }
 
         // GET: Usagers/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        //public async Task<IActionResult> Delete(string id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var usager = await _context.Usagers
+        //        .FirstOrDefaultAsync(m => m.NumAbonne == id);
+        //    if (usager == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(usager);
+        //}
+
+        
+        public async Task<IActionResult> Delete(string id, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -169,10 +213,19 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             }
 
             var usager = await _context.Usagers
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.NumAbonne == id);
+
             if (usager == null)
             {
                 return NotFound();
+            }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewData["ErrorMessage"] =
+                    "Échoue de la supression. Veuillez réessayer, si le probleme persiste " +
+                    "contacter l'administrateur de votre système.";
             }
 
             return View(usager);
@@ -193,5 +246,30 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         {
             return _context.Usagers.Any(e => e.NumAbonne == id);
         }
+
+        private string ObtenirLettresCodeUsager(Usager usager)
+        {
+            string codeLettresPrenom = "";
+
+            if (usager.Prenom.Contains('-'))
+            {
+                int indexTiret = usager.Prenom.IndexOf("-");
+
+                string codePrenomCompose = usager.Prenom.Substring(indexTiret + 1, 1);
+
+                codeLettresPrenom = usager.Prenom.Substring(0, 1) + codePrenomCompose;
+            }
+            else
+            {
+                codeLettresPrenom = usager.Prenom.Substring(0, 2);
+            }
+            
+            string codeLettres = usager.Nom.Substring(0, 2) + codeLettresPrenom;
+
+            
+
+            return (codeLettres.ToUpper());
+        }
+
     }
 }

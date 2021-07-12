@@ -35,8 +35,8 @@ namespace Bibliotheque_LIPAJOLI.Models
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Display(Name = "Nombre de défaillance(s)", Prompt = "0")]
-        [RegularExpression(@"^[0-9]*$"/*, ErrorMessage = "Ce champ ne doit comporter que des chiffres" //*/)]
+        //Sera incremente automatiquement dans la gestion des emprunts.
+        [Display(Name = "Nombre de défaillance(s)")]
         public int Defaillance { get; set; } = 0;
 
         public ICollection<Emprunt> Emprunts { get; set; }
