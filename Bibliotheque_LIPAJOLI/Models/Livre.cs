@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Bibliotheque_LIPAJOLI.Models
@@ -31,6 +32,7 @@ namespace Bibliotheque_LIPAJOLI.Models
         public double Prix { get; set; } = 0;
         [MinLength(1, ErrorMessage = "Le livre doit posséder au moins un auteur.")]
         public string Auteurs { get; set; }
+        public ICollection<Emprunt> Emprunts { get; set; }
     }
 }
 

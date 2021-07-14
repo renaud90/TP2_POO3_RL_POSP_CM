@@ -56,7 +56,10 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             }
 
             var livre = await _context.Livres
-                .FirstOrDefaultAsync(m => m.CodeLivre == id);
+                .Include(l => l.Emprunts)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.CodeLivre == id)
+                ;
             if (livre == null)
             {
                 return NotFound();

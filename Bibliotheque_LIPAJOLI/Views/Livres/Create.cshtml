@@ -49,7 +49,7 @@
                 <input type="number" asp-for="Prix" class="form-control" />
                 <span asp-validation-for="Prix" class="text-danger"></span>
             </div>
-            <div class="form-group"> Auteur(s) - Pour sélectionner pluusieurs auteurs, maintenez la touche CTRL lors de la sélection <br /> 
+            <div class="form-group"> Auteur(s) - Pour sélectionner plusieurs auteurs, maintenez la touche CTRL lors de la sélection <br /> 
                 <select name="auteurs" class="form-control" multiple>
                     @{ foreach (var auteur in ViewBag.auteurs)
                         {
