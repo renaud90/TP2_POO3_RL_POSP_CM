@@ -59,7 +59,7 @@
 
             </tr>
             @foreach (var item in Model.Emprunts.OrderBy(d => d.DateEmprunt))
-             {
+            {
                 string selectedRow = "";
                 if (item.NumAbonne == (string)ViewData["NumAbonne"])
                 {
@@ -83,20 +83,20 @@
                     <td>
                         @item.DateRetour
                     </td>
-                    @*@if (item.ObtenirDateLimite(IConfiguration config) > DateTime.Now)
+                    @if (item.ObtenirDateLimite() > DateTime.Now)
                     {
-                        <td>
+                        <td style="backgroundcolor:#F5AC87">
                             L'échéance de cet emprunt est dépassée:
                             <br />
-                            @item.ObtenirDateLimite(IConfiguration config)
+                            <img src=" " /> @item.ObtenirDateLimite()
                         </td>
                     }
                     else if (item.DateRetour == default)
                     {
                         <td>
-                            Non retourné.
+                            <img src=" " /> Non retourné.
                             <br />
-                            Date d.échéance: @item.ObtenirDateLimite(IConfiguration config)
+                            Date d.échéance: @item.ObtenirDateLimite()
                         </td>
                     }
                     else
@@ -104,9 +104,9 @@
                         <td>
                             @item.DateRetour
                         </td>
-                    }*@
+                    }
                 </tr>
-             }
+            }
 
         </table>
 

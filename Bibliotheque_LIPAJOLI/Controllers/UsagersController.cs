@@ -14,10 +14,12 @@ namespace Bibliotheque_LIPAJOLI.Controllers
     public class UsagersController : Controller
     {
         private readonly BibliothequeContext _context;
+        private readonly IConfiguration _config;
 
-        public UsagersController(BibliothequeContext context)
+        public UsagersController(BibliothequeContext context, IConfiguration config)
         {
             _context = context;
+            _config = config;
         }
 
         // GET: Usagers
@@ -26,6 +28,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["StatutSortParm"] = sortOrder == "statut" ? "statut_desc" : "statut";
             ViewData["DefaillanceSortParm"] = sortOrder == "def" ? "def_desc" : "def";
+            ViewData["NumSortParm"] = sortOrder == "num" ? "num_desc" : "num";
             ViewData["CurrentFilter"] = searchString;
 
             var usagers = from s in _context.Usagers
@@ -35,7 +38,8 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 usagers = usagers.Where(s => s.Nom.Contains(searchString)
-                                       || s.Prenom.Contains(searchString) || s.Nom.ToLower().Contains(searchString) || s.Prenom.ToLower().Contains(searchString));
+                                       || s.Prenom.Contains(searchString) || s.Nom.ToLower().Contains(searchString) || 
+                                       s.Prenom.ToLower().Contains(searchString) || s.NumAbonne.ToUpper().Contains(searchString));
             }
 
             switch (sortOrder)
@@ -55,6 +59,12 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 case "def":
                     usagers = usagers.OrderBy(s => s.Defaillance);
                     break;
+                case "num_desc":
+                    usagers = usagers.OrderByDescending(s => s.NumAbonne);
+                    break;
+                case "num":
+                    usagers = usagers.OrderBy(s => s.NumAbonne);
+                    break;
                 default:
                     usagers = usagers.OrderBy(s => s.Nom);
                     break;
@@ -63,15 +73,19 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         }
 
         // GET: Usagers/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(string id/*, DateTime dateEmprunt*/)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
+            //var emprunt = _context.Emprunts
+            //    .Single(e => e.DateEmprunt == dateEmprunt);
+
             var usager = await _context.Usagers
                 .Include(c => c.Emprunts)
+                .ThenInclude(e =>e.Livre)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.NumAbonne == id);
             if (usager == null)
@@ -79,7 +93,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 return NotFound();
             }
 
-            //usager.Emprunts.ObtenirDateLimite();
             AffichageEmprunts(usager.Emprunts);
             return View(usager);
         }
