@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -71,21 +72,21 @@ namespace Bibliotheque_LIPAJOLI.Controllers
 
             var usager = await _context.Usagers
                 .Include(c => c.Emprunts)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.NumAbonne == id);
             if (usager == null)
             {
                 return NotFound();
             }
 
+            //usager.Emprunts.ObtenirDateLimite();
+            AffichageEmprunts(usager.Emprunts);
             return View(usager);
         }
 
         // GET: Usagers/Create
         public IActionResult Create()
         {
-
-            ViewData["Statut"] = new SelectList(_context.Usagers, "Statut", "Statut");
-
             return View();
         }
 
@@ -96,22 +97,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Nom,Prenom,Statut,Email")] Usager usager)
         {
-            var dernierUsager = _context.Usagers.OrderByDescending(c => c.NumAbonne).FirstOrDefault();
-
-            if (dernierUsager == null)
-            {
-                usager.NumAbonne = ObtenirLettresCodeUsager(usager) + "0001";
-            }
-            else
-            {
-                int codeChiffres = Convert.ToInt32(dernierUsager.NumAbonne.Substring(4, 4)) + 1;
-
-                string codeChiffresString = codeChiffres.ToString("D3");
-
-                usager.NumAbonne = ObtenirLettresCodeUsager(usager) + codeChiffresString;
-            }
-
-            ViewData["Statut"] = new SelectList(_context.Usagers, "Statut", "Statut", usager.Statut);
+            CreerCodeUsager(usager);
 
             try
             {
@@ -127,7 +113,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 ModelState.AddModelError("", "Échoue de la savegarde des données. Veuillez réessayer, si le probleme persiste " +
                     "contacter l'administrateur de votre système.");
             }
-
 
             return View(usager);
         }
@@ -146,7 +131,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 return NotFound();
             }
 
-            ViewData["Statut"] = new SelectList(_context.Usagers, "Statut", "Statut", usager.Statut);
             return View(usager);
         }
 
@@ -180,31 +164,15 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Statut"] = new SelectList(_context.Usagers, "Statut", "Statut", usager.Statut);
+            
             return View(usager);
         }
 
+
         // GET: Usagers/Delete/5
-        //public async Task<IActionResult> Delete(string id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var usager = await _context.Usagers
-        //        .FirstOrDefaultAsync(m => m.NumAbonne == id);
-        //    if (usager == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(usager);
-        //}
-
-        
         public async Task<IActionResult> Delete(string id, bool? saveChangesError = false)
         {
             if (id == null)
@@ -237,9 +205,23 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var usager = await _context.Usagers.FindAsync(id);
-            _context.Usagers.Remove(usager);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if(usager == null)
+            {
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                _context.Usagers.Remove(usager);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch(DbUpdateException)
+            {
+                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
+            }
         }
 
         private bool UsagerExists(string id)
@@ -247,9 +229,19 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             return _context.Usagers.Any(e => e.NumAbonne == id);
         }
 
+        private void AffichageEmprunts(object emprunt = null)
+        {
+            var emprunts = from s in _context.Emprunts
+                          orderby s.DateEmprunt
+                           select s;
+
+            ViewBag.Emprunts = new SelectList(emprunts.AsNoTracking(), "Emprunts", "Emprunts", emprunt);
+        }
+
         private string ObtenirLettresCodeUsager(Usager usager)
         {
             string codeLettresPrenom = "";
+            string codeLettresNom = "";
 
             if (usager.Prenom.Contains('-'))
             {
@@ -263,13 +255,62 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             {
                 codeLettresPrenom = usager.Prenom.Substring(0, 2);
             }
-            
-            string codeLettres = usager.Nom.Substring(0, 2) + codeLettresPrenom;
 
-            
+            if (usager.Nom.Contains('-'))
+            {
+                int indexTiret = usager.Nom.IndexOf("-");
+
+                string codeNomCompose = usager.Nom.Substring(indexTiret + 1, 1);
+
+                codeLettresNom = usager.Nom.Substring(0, 1) + codeNomCompose;
+            }
+            else
+            {
+                codeLettresNom = usager.Nom.Substring(0, 2);
+            }
+
+            string codeLettres = codeLettresNom + codeLettresPrenom;
 
             return (codeLettres.ToUpper());
         }
+
+        private void CreerCodeUsager(Usager usager)
+        {
+            //TODO: Make sure last character of code isn't '0'
+
+            string codeFinal = "";
+            var dernierUsager = _context.Usagers.OrderByDescending(c => c.NumAbonne).FirstOrDefault();
+
+            if (dernierUsager == null)
+            {
+                codeFinal = ObtenirLettresCodeUsager(usager) + "0001";
+            }
+            else
+            {
+                int codeChiffres = Convert.ToInt32(dernierUsager.NumAbonne.Substring(4, 4)) + 1;
+
+                string codeChiffresString = codeChiffres.ToString("D3");
+
+                codeFinal = ObtenirLettresCodeUsager(usager) + codeChiffresString;
+            }
+
+            if (codeFinal.Length < 8)
+            {
+                do
+                {
+                    int i = 4;
+
+                    codeFinal = codeFinal.Insert(i, "0");
+
+                    i++;
+                }
+                while (codeFinal.Length != 8);
+            }
+
+            usager.NumAbonne = codeFinal;
+        }
+
+       
 
     }
 }

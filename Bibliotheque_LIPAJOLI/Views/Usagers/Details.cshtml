@@ -7,40 +7,110 @@
 <h1>Détails</h1>
 
 <div>
-    <h4>du profil de l'usager</h4>
+    <h4>du profil de l'usager: @Html.DisplayFor(model => model.NumAbonne)</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Nom)
         </dt>
-        <dd class = "col-sm-10"  @*@if(Model.PeutEmprunter == false){ style="color:blue" }*@>
+        <dd class="col-sm-10" @*@if(Model.PeutEmprunter == false){ style="color:blue" }*@>
             @Html.DisplayFor(model => model.Nom)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Prenom)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Prenom)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Statut)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Statut)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Email)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Defaillance)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Defaillance)
         </dd>
     </dl>
+</div>
+<hr />
+<h4>Historique d'emprunt(s)</h4>
+<hr />
+<div>
+    @if (Model.Emprunts != null)
+    {
+
+        <table class="table">
+            <tr>
+                <th>Code</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Date d'emprunt </th>
+                <th>Date du retour</th>
+
+            </tr>
+            @foreach (var item in Model.Emprunts.OrderBy(d => d.DateEmprunt))
+             {
+                string selectedRow = "";
+                if (item.NumAbonne == (string)ViewData["NumAbonne"])
+                {
+                    selectedRow = "success";
+                }
+
+                <tr>
+                    <td>
+                        @item.Livre.CodeLivre
+                    </td>
+                    <td>
+                        @item.Livre.Titre
+                    </td>
+                    <td>
+                        @item.Livre.Auteurs
+                    </td>
+                    <td>
+                        @item.DateEmprunt
+                    </td>
+                    @*khk*@
+                    <td>
+                        @item.DateRetour
+                    </td>
+                    @*@if (item.ObtenirDateLimite(IConfiguration config) > DateTime.Now)
+                    {
+                        <td>
+                            L'échéance de cet emprunt est dépassée:
+                            <br />
+                            @item.ObtenirDateLimite(IConfiguration config)
+                        </td>
+                    }
+                    else if (item.DateRetour == default)
+                    {
+                        <td>
+                            Non retourné.
+                            <br />
+                            Date d.échéance: @item.ObtenirDateLimite(IConfiguration config)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @item.DateRetour
+                        </td>
+                    }*@
+                </tr>
+             }
+
+        </table>
+
+    }
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.NumAbonne">Modifier</a> |

@@ -45,7 +45,7 @@ namespace Bibliotheque_LIPAJOLI.Data
                 new Usager()
                 {
                     Prenom = "Martin", Nom = "Caron", NumAbonne = "CAMA0002",
-                    Email = "martin.caron@gmail.com", Statut = Statut.Etudiant
+                    Email = "martin.caron@gmail.com", Statut = Statut.Étudiant
                 }
             };
 
