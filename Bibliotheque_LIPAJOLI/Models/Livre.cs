@@ -5,8 +5,7 @@ namespace Bibliotheque_LIPAJOLI.Models
 {
     public class Livre
     {
-        [Required(ErrorMessage = "Ce champ est requis."), Key]
-        [RegularExpression(@"^[A-Z]{3}[0-9]{3}", ErrorMessage = "Le code doit avoir le format MMM555.")]
+        [Key]
         [DisplayName("Code du livre")]
         public string CodeLivre { get; set; }
         [Required(ErrorMessage = "Ce champ est requis.")]
