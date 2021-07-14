@@ -14,12 +14,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Isbn10" class="control-label"></label>
-                <input asp-for="Isbn10" class="form-control" />
+                <input placeholder="1-11111-111-1" asp-for="Isbn10" class="form-control" />
                 <span asp-validation-for="Isbn10" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Isbn13" class="control-label"></label>
-                <input asp-for="Isbn13" class="form-control" />
+                <input placeholder="111-1-11111-111-1" asp-for="Isbn13" class="form-control" />
                 <span asp-validation-for="Isbn13" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -27,18 +27,16 @@
                 <input asp-for="Titre" class="form-control" />
                 <span asp-validation-for="Titre" class="text-danger"></span>
             </div>
-            <div class="form-group"> Catégorie <br />
+            <div class="form-group">
+                <label asp-for="Categorie" class="control-label"></label>
+                <select asp-for="Categorie" class="form-control">
                     @{
                         foreach (var cat in ViewBag.categories)
                         {
-                                <span class="col-3" >
-                                    <label for="@cat" class="control-label">@cat
-                                        <input type="radio" name="categorie" value="@cat" class="form-control">
-                                    </label>
-                                </span>
-                                    
+                            <option name="categorie" value="@cat" class="form-control">@cat</option>
                         }
                     }
+                </select>   
                 <span asp-validation-for="Categorie" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -51,17 +49,14 @@
                 <input type="number" asp-for="Prix" class="form-control" />
                 <span asp-validation-for="Prix" class="text-danger"></span>
             </div>
-            <div class="form-group"> Auteurs  <br />         
+            <div class="form-group"> Auteur(s) - Pour sélectionner pluusieurs auteurs, maintenez la touche CTRL lors de la sélection <br /> 
+                <select name="auteurs" class="form-control" multiple>
                     @{ foreach (var auteur in ViewBag.auteurs)
                         {
-                        <span class="col-3">
-                            <label for="@auteur" class="control-label">@auteur
-                                <input type="checkbox" name="auteurs" value="@auteur" class="form-control">
-                            </label>
-                        </span>
-
+                            <option value="@auteur" class="form-control">@auteur</option>
+                        }
                     }
-                    }
+                </select>
                 <span asp-validation-for="Auteurs" class="text-danger"></span>
             </div>
             <div class="form-group">

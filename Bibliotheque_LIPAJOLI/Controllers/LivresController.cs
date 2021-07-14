@@ -24,9 +24,27 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         }
 
         // GET: Livres
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string chaineDeRecherche, string champAFiltrer)
         {
-            return View(await _context.Livres.ToListAsync());
+            ViewBag.chaineDeRecherche = chaineDeRecherche;
+            List<Livre> livresAAfficher;
+            switch (champAFiltrer)
+            {
+                case "Titre":
+                    livresAAfficher = await _context.Livres.Where(_ => _.Titre.Contains(chaineDeRecherche)).ToListAsync();
+                    break;
+                case "Categorie":
+                    livresAAfficher = await _context.Livres.Where(_ => _.Categorie.Contains(chaineDeRecherche)).ToListAsync();
+                    break;
+                case "Auteur":
+                    livresAAfficher = await _context.Livres.Where(_ => _.Auteurs.Contains(chaineDeRecherche)).ToListAsync();
+                    break;
+                default:
+                    livresAAfficher = await _context.Livres.ToListAsync();
+                    break;
+            }
+                
+            return View(livresAAfficher);
         }
 
         // GET: Livres/Details/5
@@ -60,15 +78,23 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Isbn10,Isbn13,Titre,Quantite,Prix")] Livre livre, string categorie, string[] auteurs)
+        public async Task<IActionResult> Create([Bind("Isbn10,Isbn13,Titre,Categorie,Quantite,Prix")] Livre livre, string[] auteurs)
         {
-            if (_context.Livres.FirstOrDefault(_ => _.CodeLivre.Substring(0, 3).ToUpper() == categorie.Substring(0, 3).ToUpper()) == null)
+            if (_context.Livres.FirstOrDefault(_ => _.Categorie == livre.Categorie) == null)
             {
-                livre.CodeLivre = categorie.Substring(0, 3).ToUpper() + "001";
+                if (livre.Categorie.Contains("-"))
+                {
+                    var mots = livre.Categorie.Split("-");
+                    livre.CodeLivre = (mots[0].Substring(0, 1) + mots[1].Substring(0, 2)).ToUpper() + "001";
+                }else
+                {
+                    livre.CodeLivre = livre.Categorie.Substring(0, 3).ToUpper() + "001";
+                }
+                
             }
             else
             {
-                var valeurMaxCategorie = _context.Livres.Where(_ => _.Categorie == categorie)
+                var valeurMaxCategorie = _context.Livres.Where(_ => _.Categorie == livre.Categorie)
                                                         .Select(_ => Int32.Parse(_.CodeLivre.Substring(4, 3)))
                                                         .ToList()
                                                         .Max();
@@ -80,26 +106,33 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 {
                     nouvelleValeurMaxCategorie = "0" + nouvelleValeurMaxCategorie;
                 }
-                livre.CodeLivre = categorie.Substring(0, 3).ToUpper() + nouvelleValeurMaxCategorie;
+
+                if (livre.Categorie.Contains("-"))
+                {
+                    var mots = livre.Categorie.Split("-");
+                    livre.CodeLivre = (mots[0].Substring(0, 1) + mots[1].Substring(0, 2)).ToUpper() + nouvelleValeurMaxCategorie;
+                }
+                else
+                {
+                    livre.CodeLivre = livre.Categorie.Substring(0, 3).ToUpper() + nouvelleValeurMaxCategorie;
+                }
+
+                
             }
-            if(categorie == null)
-            {
-                ModelState.AddModelError("Categorie", "Ce champ est requis.");
-                return View(livre);
-            }
+
             if (auteurs.Length == 0)
             {
                 ModelState.AddModelError("Auteurs", "Ce champ est requis.");
                 return View(livre);
             }
-            livre.Categorie = categorie;
+
             foreach(var auteur in auteurs)
             {
                 livre.Auteurs += auteur;
-                livre.Auteurs += ",";
+                livre.Auteurs += ", ";
             }
             //Enlever la virgule à la fin
-            livre.Auteurs = livre.Auteurs.Remove(livre.Auteurs.Length - 1);
+            livre.Auteurs = livre.Auteurs.Remove(livre.Auteurs.Length - 2);
 
             
             if (ModelState.IsValid)
@@ -126,6 +159,8 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             {
                 return NotFound();
             }
+            ViewBag.categories = _config.GetSection("Bibliotheque:Categories").Get<List<string>>();
+            ViewBag.auteurs = _config.GetSection("Bibliotheque:Auteurs").Get<List<string>>();
             return View(livre);
         }
 
@@ -134,12 +169,28 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("CodeLivre,Isbn10,Isbn13,Titre,Categorie,Quantite,Prix,Auteurs")] Livre livre)
+        public async Task<IActionResult> Edit(string id, [Bind("CodeLivre,Isbn10,Isbn13,Titre,Categorie,Quantite,Prix")] Livre livre, string[] auteurs)
         {
             if (id != livre.CodeLivre)
             {
                 return NotFound();
             }
+
+            if (auteurs.Length == 0)
+            {
+                ModelState.AddModelError("Auteurs", "Ce champ est requis.");
+                return View(livre);
+            }
+
+            //On vide le champ avant de le renseigner avec les changements
+            livre.Auteurs = "";
+            foreach (var auteur in auteurs)
+            {
+                livre.Auteurs += auteur;
+                livre.Auteurs += ", ";
+            }
+            //Enlever la virgule à la fin
+            livre.Auteurs = livre.Auteurs.Remove(livre.Auteurs.Length - 2);
 
             if (ModelState.IsValid)
             {
@@ -161,6 +212,8 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.categories = _config.GetSection("Bibliotheque:Categories").Get<List<string>>();
+            ViewBag.auteurs = _config.GetSection("Bibliotheque:Auteurs").Get<List<string>>();
             return View(livre);
         }
 
@@ -197,5 +250,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         {
             return _context.Livres.Any(e => e.CodeLivre == id);
         }
+
     }
 }

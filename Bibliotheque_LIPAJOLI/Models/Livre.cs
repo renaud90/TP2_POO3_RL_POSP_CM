@@ -20,6 +20,7 @@ namespace Bibliotheque_LIPAJOLI.Models
         [MaxLength(200, ErrorMessage = "La titre doit comporter un maximum de 200 caractères.")]
         public string Titre { get; set; }
         [DisplayName("Catégorie")]
+        [Required(ErrorMessage = "Ce champ est requis.")]
         public string Categorie { get; set; }
         [Required(ErrorMessage = "Ce champ est requis.")] 
         [Range(0, int.MaxValue, ErrorMessage = "La quantité doit être positive.")]
