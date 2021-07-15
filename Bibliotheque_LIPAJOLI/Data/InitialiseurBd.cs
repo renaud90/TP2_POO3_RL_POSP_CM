@@ -45,8 +45,20 @@ namespace Bibliotheque_LIPAJOLI.Data
                 new Usager()
                 {
                     Prenom = "Martin", Nom = "Caron", NumAbonne = "CAMA0002",
-                    Email = "martin.caron@gmail.com", Statut = Statut.Etudiant
-                }
+                    Email = "martin.caron@gmail.com", Statut = Statut.Étudiant
+                },
+                 new Usager()
+                {
+                    Prenom = "Eddie", Nom = "Brock", NumAbonne = "BRED0006",
+                    Email = "beddie@gmail.com", Statut = Statut.Enseignant, 
+                    Emprunts= new Emprunt[]{ new Emprunt(){CodeLivre = contexte.Livres
+                        .Single(l => l.Titre == "Éloquence de la sardine")
+                        .CodeLivre,
+                         NumAbonne = contexte.Usagers
+                        .Single(u => u.Prenom == "Eddie" && u.Nom == "Brock")
+                        .NumAbonne,
+                         DateEmprunt = DateTime.Today.AddDays(-8)}
+                    }}//Sorry, we all know Venom ate it
             };
 
             contexte.Usagers.AddRange(usagers);

@@ -1,0 +1,20 @@
+
+#retard{
+    background-color:#ec9175;
+    font-weight: bold;
+    z-index: 3;
+}
+
+#pending{
+    z-index: 2;
+    font-style: italic;
+}
+
+#retourne{
+    z-index:1;
+}
+
+.iconStatutEmprunt{
+    height: 80%;
+}
+

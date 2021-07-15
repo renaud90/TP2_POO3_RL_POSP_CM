@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/customs.css" />
+    @RenderSection("CSS", false)
 </head>
 <body>
     <header>
@@ -26,10 +27,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Livres" asp-action="Index">Livres</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usagers" asp-action="Index">Usagers</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Emprunts" asp-action="Index">Emprunts</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Emprunts" asp-action="Index">Emprunts</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Usagers" asp-action="Index">Usagers</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Livres" asp-action="Index">Livres</a>
