@@ -9,6 +9,8 @@ namespace Bibliotheque_LIPAJOLI.Data
     {
         public static void Initialiser(BibliothequeContext contexte, IConfiguration config)
         {
+            contexte.Database.EnsureCreated();
+
             if (contexte.Livres.Any())
                 return;
 
@@ -39,7 +41,7 @@ namespace Bibliotheque_LIPAJOLI.Data
             {
                 new Usager()
                 {
-                    Prenom = "Jean-Paul", Nom = "Berger", NumAbonne = "BEJP0001", 
+                    Prenom = "Jean-Paul", Nom = "Berger", NumAbonne = "BEJP0001",
                     Email = "jpaul.berger@gmail.com", Statut = Statut.Enseignant
                 },
                 new Usager()
@@ -47,18 +49,11 @@ namespace Bibliotheque_LIPAJOLI.Data
                     Prenom = "Martin", Nom = "Caron", NumAbonne = "CAMA0002",
                     Email = "martin.caron@gmail.com", Statut = Statut.Étudiant
                 },
-                 new Usager()
+                new Usager()
                 {
                     Prenom = "Eddie", Nom = "Brock", NumAbonne = "BRED0006",
-                    Email = "beddie@gmail.com", Statut = Statut.Enseignant, 
-                    Emprunts= new Emprunt[]{ new Emprunt(){CodeLivre = contexte.Livres
-                        .Single(l => l.Titre == "Éloquence de la sardine")
-                        .CodeLivre,
-                         NumAbonne = contexte.Usagers
-                        .Single(u => u.Prenom == "Eddie" && u.Nom == "Brock")
-                        .NumAbonne,
-                         DateEmprunt = DateTime.Today.AddDays(-8)}
-                    }}//Sorry, we all know Venom ate it
+                    Email = "beddie@gmail.com", Statut = Statut.Enseignant
+                }
             };
 
             contexte.Usagers.AddRange(usagers);
@@ -76,6 +71,28 @@ namespace Bibliotheque_LIPAJOLI.Data
                         .Single(u => u.Prenom == "Martin" && u.Nom == "Caron")
                         .NumAbonne,
                     DateEmprunt = DateTime.Today
+                },
+                new Emprunt()
+                {
+                    CodeLivre = contexte.Livres
+                        .Single(l => l.Titre == "Éloquence de la sardine")
+                        .CodeLivre,
+                    NumAbonne = contexte.Usagers
+                        .Single(u => u.Prenom == "Eddie" && u.Nom == "Brock")
+                        .NumAbonne,
+                    DateEmprunt = DateTime.Today.AddDays(-8),
+                    DateRetour = DateTime.Today.AddDays(-2)
+                },
+                new Emprunt()
+                {
+                    CodeLivre = contexte.Livres
+                        .Single(l => l.Titre == "Éloquence de la sardine")
+                        .CodeLivre,
+                    NumAbonne = contexte.Usagers
+                        .Single(u => u.Prenom == "Jean-Paul" && u.Nom == "Berger")
+                        .NumAbonne,
+                    DateEmprunt = DateTime.Today.AddDays(-8),
+                    DateRetour = DateTime.Today
                 }
             };
 

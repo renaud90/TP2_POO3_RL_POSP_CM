@@ -1,15 +1,9 @@
 ﻿@model Bibliotheque_LIPAJOLI.Models.Usager
 @using Bibliotheque_LIPAJOLI.Extensions
 
-@section CSS {
-        <link href="@Url.Content("~/css/VueDetailUsager.css")" rel="stylesheet" type="text/css" />
-    }
-
 @{
     ViewData["Title"] = "Détails";
 }
-
-
 
 <h1>Détails</h1>
 
@@ -55,7 +49,6 @@
 <div>
     @if (Model.Emprunts != null)
     {
-
         <table class="table">
             <tr>
                 <th>Code</th>
@@ -67,12 +60,6 @@
             </tr>
             @foreach (var item in Model.Emprunts.OrderBy(d => d.DateEmprunt))
             {
-                string selectedRow = "";
-                if (item.NumAbonne == (string)ViewData["NumAbonne"])
-                {
-                    selectedRow = "success";
-                }
-
                 <tr>
                     <td>
                         @item.Livre.CodeLivre
@@ -86,28 +73,32 @@
                     <td>
                         @item.DateEmprunt
                     </td>
+                    
+                    @{
+                        var dateLimiteEmprunt = item.ObtenirDateLimite((int) ViewBag.JoursLocation);
 
-                    @if (item.ObtenirDateLimite((int)ViewBag.JoursLocation) > DateTime.Now)
-                    {
-                        <td id="retard" @*style="background-color:#F5AC87"*@>
-                            L'échéance de cet emprunt est dépassée:
-                            <br />
-                            <img class="iconStatutEmprunt" src="..\..\wwwroot\Icon_ExclamationMark.png" /> @item.ObtenirDateLimite((int)ViewBag.JoursLocation)
-                        </td>
-                    }
-                    else if (item.DateRetour == default)
-                    {
-                        <td id="pending">
-                            Non retourné.
-                            <br />
-                            <img class="iconStatutEmprunt" src="..\..\wwwroot\Icon_Pending.png" /> Date d'échéance: @item.ObtenirDateLimite((int)ViewBag.JoursLocation)
-                        </td>
-                    }
-                    else
-                    {
-                        <td id="retourne">
-                            <img class="iconStatutEmprunt" src="..\..\wwwroot\Icon_Checkmark.png" /> @item.DateRetour
-                        </td>
+                        if (dateLimiteEmprunt < DateTime.Now)
+                        {
+                            <td id="retard">
+                                L'échéance de cet emprunt est dépassée:
+                                <br />
+                                <img class="iconStatutEmprunt" src="Icon_ExclamationMark.png" /> @dateLimiteEmprunt
+                            </td>
+                        }
+                        else if (item.DateRetour == DateTime.MinValue)
+                        {
+                            <td id="pending">
+                                Non retourné.
+                                <br />
+                                <img class="iconStatutEmprunt" src="Icon_Pending.png" /> Date d'échéance: @dateLimiteEmprunt
+                            </td>
+                        }
+                        else
+                        {
+                            <td id="retourne">
+                                <img class="iconStatutEmprunt" src="Icon_Checkmark.png" /> @item.DateRetour
+                            </td>
+                        }
                     }
                 </tr>
             }

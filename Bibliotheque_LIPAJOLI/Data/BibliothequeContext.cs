@@ -1,6 +1,5 @@
 ﻿using Bibliotheque_LIPAJOLI.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace Bibliotheque_LIPAJOLI.Data
 {

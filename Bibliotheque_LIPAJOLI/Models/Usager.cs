@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,18 +8,16 @@ namespace Bibliotheque_LIPAJOLI.Models
     public enum Statut
     {
         Enseignant,
-        Étudiant
+        [Display(Name = "Étudiant")]
+        Etudiant
     }
 
     public class Usager
     {
-        //La valeur "AAAA0000" ne sera utilisee qu'en valeur par defaut
-        //pour contourner le but durant la creation d'un nouvel usager.
-        //Le controlleur fera la verification.
-        [/*Required(ErrorMessage = "Veuillez renseigner ce champ"),*/ Key]
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [StringLength(8, MinimumLength = 8)]
-        public string NumAbonne { get; set; } /*= "AAAA0000";*/
+        [Display(Name = "Numéro d'abonné")]
+        public string NumAbonne { get; set; } 
 
         [Required(ErrorMessage = "Veuillez renseigner ce champ")]
         [StringLength(30, MinimumLength = 2, ErrorMessage = "Ce champ doit comporter au moins 2 caractères et est limité à 30")]
@@ -45,8 +44,7 @@ namespace Bibliotheque_LIPAJOLI.Models
         [Display(Name = "Nombre de défaillance(s)")]
         public int Defaillance { get; set; } = 0;
 
-        
-        public virtual ICollection<Emprunt> Emprunts { get; set; }
+        public ICollection<Emprunt> Emprunts { get; set; }
 
         public bool PeutEmprunter => Defaillance < 3;
 
