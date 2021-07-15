@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Bibliotheque_LIPAJOLI.Models.Livre>
+
+@{
+    ViewData["Title"] = "LIPAJOLI - Livres";
+}
+
+<h1>Bibliothèque LIPAJOLI - Liste des livres</h1>
+
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Cherchez un livre: <input type="text" name="chaineDeRecherche" value="@ViewBag.chaineDeRecherche" />
+            <label>Filtre:
+                <select name="champAFiltrer" class="form-control">
+                    <option value="Titre">Titre</option>
+                    <option value="Auteur">Auteur</option>
+                    <option value="Categorie">Catégorie</option>
+                </select>
+            </label>
+            <input type="submit" value="Chercher" class="btn btn-default" /> |
+            <a asp-action="Index">Retourner à la liste complète des livres</a>
+        </p>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CodeLivre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Titre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Categorie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantite)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Auteurs)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodeLivre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categorie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Auteurs)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CodeLivre">Modifier</a> |
+                <a asp-action="Details" asp-route-id="@item.CodeLivre">Détails</a> |
+                <a asp-action="Delete" asp-route-id="@item.CodeLivre">Effacer</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
