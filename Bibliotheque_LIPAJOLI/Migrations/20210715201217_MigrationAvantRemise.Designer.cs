@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bibliotheque_LIPAJOLI.Migrations
 {
     [DbContext(typeof(BibliothequeContext))]
-    [Migration("20210714170540_AjoutListeEmpruntsModelLivre")]
-    partial class AjoutListeEmpruntsModelLivre
+    [Migration("20210715201217_MigrationAvantRemise")]
+    partial class MigrationAvantRemise
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -89,10 +89,12 @@ namespace Bibliotheque_LIPAJOLI.Migrations
 
                     b.Property<string>("Nom")
                         .IsRequired()
+                        .HasMaxLength(30)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Statut")

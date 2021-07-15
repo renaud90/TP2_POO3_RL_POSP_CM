@@ -60,49 +60,65 @@
             </tr>
             @foreach (var item in Model.Emprunts.OrderBy(d => d.DateEmprunt))
             {
-                <tr>
-                    <td>
-                        @item.Livre.CodeLivre
-                    </td>
-                    <td>
-                        @item.Livre.Titre
-                    </td>
-                    <td>
-                        @item.Livre.Auteurs
-                    </td>
-                    <td>
-                        @item.DateEmprunt
-                    </td>
-                    
-                    @{
-                        var dateLimiteEmprunt = item.ObtenirDateLimite((int) ViewBag.JoursLocation);
+        <tr>
+            <td>
+                @item.Livre.CodeLivre
+            </td>
+            <td>
+                @item.Livre.Titre
+            </td>
+            <td>
+                @item.Livre.Auteurs
+            </td>
+            <td>
+                @item.DateEmprunt
+            </td>
 
-                        if (dateLimiteEmprunt < DateTime.Now)
-                        {
-                            <td id="retard">
-                                L'échéance de cet emprunt est dépassée:
-                                <br />
-                                <img class="iconStatutEmprunt" src="Icon_ExclamationMark.png" /> @dateLimiteEmprunt
-                            </td>
-                        }
-                        else if (item.DateRetour == DateTime.MinValue)
-                        {
-                            <td id="pending">
-                                Non retourné.
-                                <br />
-                                <img class="iconStatutEmprunt" src="Icon_Pending.png" /> Date d'échéance: @dateLimiteEmprunt
-                            </td>
-                        }
-                        else
-                        {
-                            <td id="retourne">
-                                <img class="iconStatutEmprunt" src="Icon_Checkmark.png" /> @item.DateRetour
-                            </td>
-                        }
-                    }
-                </tr>
+            @{
+                var dateLimiteEmprunt = item.ObtenirDateLimite((int)ViewBag.JoursLocation);
+                var empruntRetourneEnRetard = item.DateRetour > dateLimiteEmprunt.Date;
+                var empruntNonRetourne = item.DateRetour == DateTime.MinValue;
+
+                if (empruntNonRetourne && DateTime.Today > dateLimiteEmprunt)
+                {
+                    <td id="pending" class="en-retard">
+                        <img class="iconStatutEmprunt" src="/images/Icon_ExclamationMark.png" alt=""/>
+                        Non retourné.
+                        <br/>
+                        L'échéance de cet emprunt est dépassée!
+                        <br/>
+                        Date d'échéance: @dateLimiteEmprunt
+                    </td>
+                }
+                else if (empruntNonRetourne)
+                {
+                    <td id="pending">
+                        <img class="iconStatutEmprunt" src="/images/Icon_Pending.png" alt="" />
+                        Non retourné.
+                        <br />
+                        Date d'échéance: @dateLimiteEmprunt
+                    </td>
+                }
+                else if (empruntRetourneEnRetard)
+                {
+                    <td id="retourne" class="en-retard">
+                        <img class="iconStatutEmprunt" src="/images/Icon_ExclamationMark.png" alt="" />
+                        L'échéance de cet emprunt est dépassée!
+                        <br />
+                        Date limite : @dateLimiteEmprunt
+                        <br />
+                        Date retournée : @item.DateRetour
+                    </td>
+                }
+                else
+                {
+                    <td id="retourne">
+                        <img class="iconStatutEmprunt" src="/images/Icon_Checkmark.png" alt="" /> @item.DateRetour
+                    </td>
+                }
             }
-
+        </tr>
+            }
         </table>
 
     }

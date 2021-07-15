@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Bibliotheque_LIPAJOLI.Migrations
 {
-    public partial class MigrationInitiale : Migration
+    public partial class MigrationAvantRemise : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,13 +12,13 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                 columns: table => new
                 {
                     CodeLivre = table.Column<string>(type: "TEXT", nullable: false),
-                    Isbn10 = table.Column<string>(type: "TEXT", nullable: true),
+                    Isbn10 = table.Column<string>(type: "TEXT", nullable: false),
                     Isbn13 = table.Column<string>(type: "TEXT", nullable: false),
-                    Titre = table.Column<string>(type: "TEXT", nullable: false),
+                    Titre = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     Categorie = table.Column<string>(type: "TEXT", nullable: false),
                     Quantite = table.Column<int>(type: "INTEGER", nullable: false),
                     Prix = table.Column<double>(type: "REAL", nullable: false),
-                    Auteurs = table.Column<string>(type: "TEXT", nullable: false)
+                    Auteurs = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,7 +29,7 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                 name: "Usager",
                 columns: table => new
                 {
-                    NumAbonne = table.Column<string>(type: "TEXT", maxLength: 8, nullable: false),
+                    NumAbonne = table.Column<string>(type: "TEXT", nullable: false),
                     Nom = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
                     Prenom = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Statut = table.Column<int>(type: "INTEGER", nullable: false),

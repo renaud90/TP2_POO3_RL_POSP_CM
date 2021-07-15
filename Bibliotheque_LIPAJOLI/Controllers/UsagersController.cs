@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bibliotheque_LIPAJOLI.Data;
 using Bibliotheque_LIPAJOLI.Models;
@@ -34,12 +33,12 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             var usagers = from s in _context.Usagers
                            select s;
 
-
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
-                usagers = usagers.Where(s => s.Nom.Contains(searchString)
-                                       || s.Prenom.Contains(searchString) || s.Nom.ToLower().Contains(searchString) || 
-                                       s.Prenom.ToLower().Contains(searchString) || s.NumAbonne.ToUpper().Contains(searchString));
+                var searchStringToUpper = searchString.ToUpper();
+                usagers = usagers.Where(s => s.Nom.ToUpper().Contains(searchStringToUpper)
+                                             || s.Prenom.ToUpper().Contains(searchStringToUpper) 
+                                             || s.NumAbonne.ToUpper().Contains(searchStringToUpper));
             }
 
             switch (sortOrder)
@@ -73,24 +72,26 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         }
 
         // GET: Usagers/Details/5
-        public async Task<IActionResult> Details(string id/*, DateTime dateEmprunt*/)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
+            ViewBag.JoursLocation = _config.GetValue<int>("Bibliotheque:JoursEmprunt");
+
             var usager = await _context.Usagers
                 .Include(c => c.Emprunts)
                 .ThenInclude(e =>e.Livre)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.NumAbonne == id);
+
             if (usager == null)
             {
                 return NotFound();
             }
 
-            AffichageEmprunts(usager.Emprunts);
             return View(usager);
         }
 
@@ -218,7 +219,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
 
             if(usager == null)
             {
-
                 return RedirectToAction(nameof(Index));
             }
 
@@ -237,17 +237,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         private bool UsagerExists(string id)
         {
             return _context.Usagers.Any(e => e.NumAbonne == id);
-        }
-
-        private void AffichageEmprunts(object emprunt = null)
-        {
-            var emprunts = from s in _context.Emprunts
-                          orderby s.DateEmprunt
-                           select s;
-
-            ViewBag.JoursLocation = _config.GetValue<int>("Bibliotheque:JoursEmprunt");
-
-            ViewBag.Emprunts = new SelectList(emprunts.AsNoTracking(), "Emprunts", "Emprunts", emprunt);
         }
 
         private string ObtenirLettresCodeUsager(Usager usager)
@@ -288,10 +277,11 @@ namespace Bibliotheque_LIPAJOLI.Controllers
 
         private void CreerCodeUsager(Usager usager)
         {
-            //TODO: Make sure last character of code isn't '0'
-
             string codeFinal = "";
-            var dernierUsager = _context.Usagers.OrderByDescending(c => c.NumAbonne).FirstOrDefault();
+            var dernierUsager = _context.Usagers
+                .ToList()
+                .OrderByDescending(ObtenirValeurNumeroAbonne)
+                .FirstOrDefault();
 
             if (dernierUsager == null)
             {
@@ -299,30 +289,20 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             }
             else
             {
-                int codeChiffres = Convert.ToInt32(dernierUsager.NumAbonne.Substring(4, 4)) + 1;
+                int codeChiffres = ObtenirValeurNumeroAbonne(dernierUsager) + 1;
 
-                string codeChiffresString = codeChiffres.ToString("D3");
-
+                string codeChiffresString = codeChiffres.ToString("D4"); 
                 codeFinal = ObtenirLettresCodeUsager(usager) + codeChiffresString;
-            }
-
-            if (codeFinal.Length < 8)
-            {
-                do
-                {
-                    int i = 4;
-
-                    codeFinal = codeFinal.Insert(i, "0");
-
-                    i++;
-                }
-                while (codeFinal.Length != 8);
             }
 
             usager.NumAbonne = codeFinal;
         }
 
-       
+        private static int ObtenirValeurNumeroAbonne(Usager usager)
+        {
+            return int.Parse(usager.NumAbonne.Substring(4, 4));
+        }
+
 
     }
 }

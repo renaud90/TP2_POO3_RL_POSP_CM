@@ -24,8 +24,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Statut" class="control-label"></label>
-                <select asp-for="@Model.Statut" class="form-control" asp-items="Html.GetEnumSelectList<Statut>()">
-                    <option value="">- Selectionner le statut -</option>
+                <select asp-for="Statut" class="form-control" asp-items="Html.GetEnumSelectList<Statut>()">
+                    <option value="">- Sélectionner le statut -</option>
                 </select>
                 <span asp-validation-for="Statut" class="text-danger" />
             </div>

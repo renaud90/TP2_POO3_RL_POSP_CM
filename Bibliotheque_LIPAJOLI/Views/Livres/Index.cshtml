@@ -6,11 +6,11 @@
 
 <h1>Bibliothèque LIPAJOLI - Liste des livres</h1>
 
-
+<a asp-action="Create">Créer un livre</a>
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            Cherchez un livre: <input type="text" name="chaineDeRecherche" value="@ViewBag.chaineDeRecherche" />
+            Cherchez un livre: <input type="text" name="chaineDeRecherche" value="@ViewBag.ChaineDeRecherche" />
             <label>Filtre:
                 <select name="champAFiltrer" class="form-control">
                     <option value="Titre">Titre</option>

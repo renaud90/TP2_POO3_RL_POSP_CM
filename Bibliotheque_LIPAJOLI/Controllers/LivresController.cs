@@ -26,18 +26,22 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // GET: Livres
         public async Task<IActionResult> Index(string chaineDeRecherche, string champAFiltrer)
         {
+
             ViewBag.chaineDeRecherche = chaineDeRecherche;
+
+            var chaineDeRechercheMajuscules = chaineDeRecherche?.ToUpper();
+
             List<Livre> livresAAfficher;
             switch (champAFiltrer)
             {
                 case "Titre":
-                    livresAAfficher = await _context.Livres.Where(_ => _.Titre.Contains(chaineDeRecherche)).ToListAsync();
+                    livresAAfficher = await _context.Livres.Where(_ => _.Titre.ToUpper().Contains(chaineDeRechercheMajuscules)).ToListAsync();
                     break;
                 case "Categorie":
-                    livresAAfficher = await _context.Livres.Where(_ => _.Categorie.Contains(chaineDeRecherche)).ToListAsync();
+                    livresAAfficher = await _context.Livres.Where(_ => _.Categorie.ToUpper().Contains(chaineDeRechercheMajuscules)).ToListAsync();
                     break;
                 case "Auteur":
-                    livresAAfficher = await _context.Livres.Where(_ => _.Auteurs.Contains(chaineDeRecherche)).ToListAsync();
+                    livresAAfficher = await _context.Livres.Where(_ => _.Auteurs.ToUpper().Contains(chaineDeRechercheMajuscules)).ToListAsync();
                     break;
                 default:
                     livresAAfficher = await _context.Livres.ToListAsync();
@@ -93,7 +97,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 {
                     livre.CodeLivre = livre.Categorie.Substring(0, 3).ToUpper() + "001";
                 }
-                
             }
             else
             {
@@ -119,8 +122,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 {
                     livre.CodeLivre = livre.Categorie.Substring(0, 3).ToUpper() + nouvelleValeurMaxCategorie;
                 }
-
-                
             }
 
             if (auteurs.Length == 0)

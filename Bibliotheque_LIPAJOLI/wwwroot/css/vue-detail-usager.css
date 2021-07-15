@@ -1,5 +1,5 @@
 
-#retard{
+.en-retard {
     background-color:#ec9175;
     font-weight: bold;
     z-index: 3;
@@ -15,6 +15,6 @@
 }
 
 .iconStatutEmprunt{
-    height: 80%;
+    max-width: 1.5em;
 }
 
