@@ -80,9 +80,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 return NotFound();
             }
 
-            //var emprunt = _context.Emprunts
-            //    .Single(e => e.DateEmprunt == dateEmprunt);
-
             var usager = await _context.Usagers
                 .Include(c => c.Emprunts)
                 .ThenInclude(e =>e.Livre)
@@ -247,6 +244,8 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             var emprunts = from s in _context.Emprunts
                           orderby s.DateEmprunt
                            select s;
+
+            ViewBag.JoursLocation = _config.GetValue<int>("Bibliotheque:JoursEmprunt");
 
             ViewBag.Emprunts = new SelectList(emprunts.AsNoTracking(), "Emprunts", "Emprunts", emprunt);
         }

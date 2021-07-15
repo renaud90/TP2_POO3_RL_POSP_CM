@@ -29,9 +29,9 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                 name: "Usager",
                 columns: table => new
                 {
-                    NumAbonne = table.Column<string>(type: "TEXT", nullable: false),
-                    Nom = table.Column<string>(type: "TEXT", nullable: false),
-                    Prenom = table.Column<string>(type: "TEXT", nullable: false),
+                    NumAbonne = table.Column<string>(type: "TEXT", maxLength: 8, nullable: false),
+                    Nom = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
+                    Prenom = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Statut = table.Column<int>(type: "INTEGER", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     Defaillance = table.Column<int>(type: "INTEGER", nullable: false)

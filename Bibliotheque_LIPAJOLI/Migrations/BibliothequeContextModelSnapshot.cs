@@ -75,6 +75,7 @@ namespace Bibliotheque_LIPAJOLI.Migrations
             modelBuilder.Entity("Bibliotheque_LIPAJOLI.Models.Usager", b =>
                 {
                     b.Property<string>("NumAbonne")
+                        .HasMaxLength(8)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Defaillance")

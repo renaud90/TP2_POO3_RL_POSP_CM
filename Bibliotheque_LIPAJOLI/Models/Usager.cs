@@ -41,9 +41,11 @@ namespace Bibliotheque_LIPAJOLI.Models
         public string Email { get; set; }
 
         //Sera incremente automatiquement dans la gestion des emprunts.
+        //TP2.2: Dans Controller ajouter loop qui compte les insatnces dont DateTime.Now>DateEmprunt+this.ObtenirJoursEmprunt()
         [Display(Name = "Nombre de défaillance(s)")]
         public int Defaillance { get; set; } = 0;
 
+        
         public virtual ICollection<Emprunt> Emprunts { get; set; }
 
         public bool PeutEmprunter => Defaillance < 3;

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bibliotheque_LIPAJOLI.Migrations
 {
     [DbContext(typeof(BibliothequeContext))]
-    [Migration("20210703210145_MigrationInitiale")]
+    [Migration("20210715020908_MigrationInitiale")]
     partial class MigrationInitiale
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,6 +77,7 @@ namespace Bibliotheque_LIPAJOLI.Migrations
             modelBuilder.Entity("Bibliotheque_LIPAJOLI.Models.Usager", b =>
                 {
                     b.Property<string>("NumAbonne")
+                        .HasMaxLength(8)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Defaillance")
@@ -88,10 +89,12 @@ namespace Bibliotheque_LIPAJOLI.Migrations
 
                     b.Property<string>("Nom")
                         .IsRequired()
+                        .HasMaxLength(30)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
+                        .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Statut")

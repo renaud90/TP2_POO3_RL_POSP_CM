@@ -1,8 +1,15 @@
 ﻿@model Bibliotheque_LIPAJOLI.Models.Usager
+@using Bibliotheque_LIPAJOLI.Extensions
+
+@section CSS {
+        <link href="@Url.Content("~/css/VueDetailUsager.css")" rel="stylesheet" type="text/css" />
+    }
 
 @{
     ViewData["Title"] = "Détails";
 }
+
+
 
 <h1>Détails</h1>
 
@@ -13,7 +20,7 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Nom)
         </dt>
-        <dd class="col-sm-10" @*@if(Model.PeutEmprunter == false){ style="color:blue" }*@>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Nom)
         </dd>
         <dt class="col-sm-2">
@@ -79,30 +86,27 @@
                     <td>
                         @item.DateEmprunt
                     </td>
-                    @*khk*@
-                    <td>
-                        @item.DateRetour
-                    </td>
-                    @if (item.ObtenirDateLimite() > DateTime.Now)
+
+                    @if (item.ObtenirDateLimite((int)ViewBag.JoursLocation) > DateTime.Now)
                     {
-                        <td style="backgroundcolor:#F5AC87">
+                        <td id="retard" @*style="background-color:#F5AC87"*@>
                             L'échéance de cet emprunt est dépassée:
                             <br />
-                            <img src=" " /> @item.ObtenirDateLimite()
+                            <img class="iconStatutEmprunt" src="..\..\wwwroot\Icon_ExclamationMark.png" /> @item.ObtenirDateLimite((int)ViewBag.JoursLocation)
                         </td>
                     }
                     else if (item.DateRetour == default)
                     {
-                        <td>
-                            <img src=" " /> Non retourné.
+                        <td id="pending">
+                            Non retourné.
                             <br />
-                            Date d.échéance: @item.ObtenirDateLimite()
+                            <img class="iconStatutEmprunt" src="..\..\wwwroot\Icon_Pending.png" /> Date d'échéance: @item.ObtenirDateLimite((int)ViewBag.JoursLocation)
                         </td>
                     }
                     else
                     {
-                        <td>
-                            @item.DateRetour
+                        <td id="retourne">
+                            <img class="iconStatutEmprunt" src="..\..\wwwroot\Icon_Checkmark.png" /> @item.DateRetour
                         </td>
                     }
                 </tr>
