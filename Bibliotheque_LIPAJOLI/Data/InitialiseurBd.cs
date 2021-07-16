@@ -51,7 +51,7 @@ namespace Bibliotheque_LIPAJOLI.Data
                 },
                 new Usager()
                 {
-                    Prenom = "Eddie", Nom = "Brock", NumAbonne = "BRED0006",
+                    Prenom = "Eddie", Nom = "Brock", NumAbonne = "BRED0003",
                     Email = "beddie@gmail.com", Statut = Statut.Enseignant
                 }
             };
@@ -93,6 +93,17 @@ namespace Bibliotheque_LIPAJOLI.Data
                         .NumAbonne,
                     DateEmprunt = DateTime.Today.AddDays(-8),
                     DateRetour = DateTime.Today
+                }, 
+                new Emprunt()
+                {
+                    CodeLivre = contexte.Livres
+                        .Single(l => l.Titre == "Python pour les nuls 3e Édition")
+                        .CodeLivre,
+                    NumAbonne = contexte.Usagers
+                        .Single(u => u.Prenom == "Eddie" && u.Nom == "Brock")
+                        .NumAbonne,
+                    DateEmprunt = DateTime.Today.AddDays(-20),
+                    DateRetour = DateTime.Today.AddDays(-10)
                 }
             };
 
