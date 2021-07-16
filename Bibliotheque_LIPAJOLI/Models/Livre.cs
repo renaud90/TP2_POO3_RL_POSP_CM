@@ -26,10 +26,12 @@ namespace Bibliotheque_LIPAJOLI.Models
         [Required(ErrorMessage = "Ce champ est requis.")] 
         [Range(0, int.MaxValue, ErrorMessage = "La quantité doit être positive.")]
         [DisplayName("Quantité")]
-        public int Quantite { get; set; } = 0;
+        public int Quantite { get; set; }
+
         [Required(ErrorMessage = "Ce champ est requis.")]
         [Range(0, double.MaxValue, ErrorMessage = "Le prix doit être un nombre postitif.")]
-        public double Prix { get; set; } = 0;
+        public double Prix { get; set; }
+        
         [MinLength(1, ErrorMessage = "Le livre doit posséder au moins un auteur.")]
         public string Auteurs { get; set; }
         public ICollection<Emprunt> Emprunts { get; set; }

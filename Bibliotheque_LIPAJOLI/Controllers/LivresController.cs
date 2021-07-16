@@ -77,8 +77,8 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // GET: Livres/Create
         public IActionResult Create()
         {
-            ViewBag.categories = _config.GetSection("Bibliotheque:Categories").Get<List<string>>();
-            ViewBag.auteurs = _config.GetSection("Bibliotheque:Auteurs").Get<List<string>>();
+            ViewBag.Categories = new SelectList(_config.GetSection("Bibliotheque:Categories").Get<List<string>>());
+            ViewBag.Auteurs = new SelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>());
             return View();
         }
 
@@ -126,6 +126,9 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 }
             }
 
+            ViewBag.Categories = new SelectList(_config.GetSection("Bibliotheque:Categories").Get<List<string>>());
+            ViewBag.Auteurs = new SelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>());
+
             if (auteurs.Length == 0)
             {
                 ModelState.AddModelError("Auteurs", "Ce champ est requis.");
@@ -140,15 +143,13 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             //Enlever la virgule à la fin
             livre.Auteurs = livre.Auteurs.Remove(livre.Auteurs.Length - 2);
 
-            
             if (ModelState.IsValid)
             {
-                _context.Add(livre);
+                _context.Livres.Add(livre);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.categories = _config.GetSection("Bibliotheque:Categories").Get<List<string>>();
-            ViewBag.auteurs = _config.GetSection("Bibliotheque:Auteurs").Get<List<string>>();
+
             return View(livre);
         }
 
@@ -165,8 +166,10 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             {
                 return NotFound();
             }
-            ViewBag.categories = _config.GetSection("Bibliotheque:Categories").Get<List<string>>();
-            ViewBag.auteurs = _config.GetSection("Bibliotheque:Auteurs").Get<List<string>>();
+            
+            ViewBag.Categories = new SelectList(_config.GetSection("Bibliotheque:Categories").Get<List<string>>());
+            ViewBag.Auteurs = new SelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>());
+            
             return View(livre);
         }
 
@@ -181,7 +184,10 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             {
                 return NotFound();
             }
-
+            
+            ViewBag.Categories = new SelectList(_config.GetSection("Bibliotheque:Categories").Get<List<string>>());
+            ViewBag.Auteurs = new SelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>());
+            
             if (auteurs.Length == 0)
             {
                 ModelState.AddModelError("Auteurs", "Ce champ est requis.");
@@ -218,8 +224,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.categories = _config.GetSection("Bibliotheque:Categories").Get<List<string>>();
-            ViewBag.auteurs = _config.GetSection("Bibliotheque:Auteurs").Get<List<string>>();
+            
             return View(livre);
         }
 

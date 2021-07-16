@@ -16,6 +16,7 @@ namespace Bibliotheque_LIPAJOLI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Livre>().ToTable("Livre");
+
             modelBuilder.Entity<Usager>().ToTable("Usager");
 
             modelBuilder.Entity<Emprunt>().ToTable("Emprunt")

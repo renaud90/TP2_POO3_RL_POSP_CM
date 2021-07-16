@@ -1,4 +1,5 @@
-﻿@model Bibliotheque_LIPAJOLI.Models.Livre
+﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@model Bibliotheque_LIPAJOLI.Models.Livre
 
 @{
     ViewData["Title"] = "Modifier un livre";
@@ -30,20 +31,15 @@
             </div>
             <div class="form-group">
                 <label asp-for="Categorie" class="control-label"></label>
-                <select asp-for="Categorie" class="form-control">
-                    @{
-                        foreach (var cat in ViewBag.categories)
-                        {
-                            <option name="categorie" value="@cat" class="form-control">@cat</option>
-                        }
-                    }
+                <select asp-for="Categorie" class="form-control" asp-items="ViewBag.Categories">
                 </select>
                 <span asp-validation-for="Categorie" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Quantite" class="control-label"></label>
                 <input asp-for="Quantite" class="form-control" />
-                <span asp-validation-for="Quantite" class="text-danger"></span>
+                <span asp-
+                      -for="Quantite" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Prix" class="control-label"></label>
@@ -51,25 +47,20 @@
                 <span asp-validation-for="Prix" class="text-danger"></span>
             </div>
             <div class="form-group">
-                Auteur(s) - Pour sélectionner pluusieurs auteurs, maintenez la touche CTRL lors de la sélection <br />
-                <select name="auteurs" class="form-control" multiple>
-                    @{ foreach (var auteur in ViewBag.auteurs)
-                        {
-                            <option value="@auteur" class="form-control">@auteur</option>
-                        }
-                    }
+                Auteur(s) - Pour sélectionner plusieurs auteurs, maintenez la touche CTRL lors de la sélection <br />
+                <select name="auteurs" class="form-control" multiple asp-items="ViewBag.Auteurs">
                 </select>
                 <span asp-validation-for="Auteurs" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Sauvegarder" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Retour à la liste de luivres</a>
+    <a asp-action="Index">Retour à la liste de livres</a>
 </div>
 
 @section Scripts {
