@@ -1,17 +1,12 @@
 
 .en-retard {
-    background-color:#ec9175;
+    background-color: #ff6666;
     font-weight: bold;
-    z-index: 3;
 }
 
-#pending{
-    z-index: 2;
+.en-attente {
+    background-color: #fff6be;
     font-style: italic;
-}
-
-#retourne{
-    z-index:1;
 }
 
 .iconStatutEmprunt{

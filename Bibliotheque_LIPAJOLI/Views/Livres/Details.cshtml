@@ -58,52 +58,49 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Auteurs)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Emprunts)
-        </dt>
-        <dd class="col-sm-10">
-            <table class="table">
-                <tr>
-                    <th>Numéro d'abonné</th>
-                    <th>Date d'emprunt</th>
-                    <th>Est Retourné</th>
-                </tr>
-                @foreach (var item in Model.Emprunts.OrderByDescending(_ => _.DateEmprunt))
-                {
-                   
-                    string classeTexteRouge;
-                    if (item.DateRetour == DateTime.MinValue)
+    </dl>
+</div>
+<hr/>
+<h4>Historique d'emprunt(s)</h4>
+<hr />
+<div>
+<table class="table">
+    <tr>
+        <th>Numéro d'abonné</th>
+        <th>Date d'emprunt</th>
+        <th>Est Retourné</th>
+    </tr>
+    @foreach (var item in Model.Emprunts.OrderByDescending(_ => _.DateEmprunt))
+    {
+        string classeTexteRouge = "";
+        bool nEstPasRetourne = item.DateRetour == DateTime.MinValue;
+        if (nEstPasRetourne)
+        {
+            classeTexteRouge = "text-danger";
+        }
+
+        <tr class="@classeTexteRouge">
+            <td>
+                @Html.DisplayFor(modelItem => item.NumAbonne)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateEmprunt)
+            </td>
+            <td>
+                @{ 
+                    if (nEstPasRetourne)
                     {
-                        classeTexteRouge = "text-red";
+                        @Html.Raw("Non")
                     }
                     else
                     {
-                        classeTexteRouge = "";
+                        @Html.Raw("Oui")
                     }
-                  
-                    <tr class="@classeTexteRouge">
-                        <td>
-                            @Html.DisplayFor(modelItem => item.NumAbonne)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateEmprunt)
-                        </td>
-                        <td>
-                            @{ if (item.DateRetour == DateTime.MinValue)
-                                {
-                                    @Html.Raw("Non");
-                                }
-                                else
-                                {
-                                    @Html.Raw("Non");
-                                }
-                            }
-                        </td>
-                    </tr>
                 }
-            </table>
-        </dd>
-    </dl>
+            </td>
+        </tr>
+    }
+</table>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.CodeLivre">Modifier</a> |

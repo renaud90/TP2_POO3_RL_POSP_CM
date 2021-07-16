@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Bibliotheque_LIPAJOLI.Data;
+using Bibliotheque_LIPAJOLI.Extensions;
 using Bibliotheque_LIPAJOLI.Models;
 
 namespace Bibliotheque_LIPAJOLI.Controllers
@@ -233,7 +236,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
             }
         }
-
+        
         private bool UsagerExists(string id)
         {
             return _context.Usagers.Any(e => e.NumAbonne == id);
@@ -241,43 +244,36 @@ namespace Bibliotheque_LIPAJOLI.Controllers
 
         private string ObtenirLettresCodeUsager(Usager usager)
         {
-            string codeLettresPrenom = "";
-            string codeLettresNom = "";
-
-            if (usager.Prenom.Contains('-'))
-            {
-                int indexTiret = usager.Prenom.IndexOf("-");
-
-                string codePrenomCompose = usager.Prenom.Substring(indexTiret + 1, 1);
-
-                codeLettresPrenom = usager.Prenom.Substring(0, 1) + codePrenomCompose;
-            }
-            else
-            {
-                codeLettresPrenom = usager.Prenom.Substring(0, 2);
-            }
-
-            if (usager.Nom.Contains('-'))
-            {
-                int indexTiret = usager.Nom.IndexOf("-");
-
-                string codeNomCompose = usager.Nom.Substring(indexTiret + 1, 1);
-
-                codeLettresNom = usager.Nom.Substring(0, 1) + codeNomCompose;
-            }
-            else
-            {
-                codeLettresNom = usager.Nom.Substring(0, 2);
-            }
+            string codeLettresPrenom = CodeLettresNom(usager.Prenom);
+            string codeLettresNom = CodeLettresNom(usager.Nom);
 
             string codeLettres = codeLettresNom + codeLettresPrenom;
 
-            return (codeLettres.ToUpper());
+            return codeLettres.ToUpper().EnleverSymbolesDiacritiques();
+        }
+        
+        private static string CodeLettresNom(string nom)
+        {
+            string codeLettresNom;
+            if (nom.Contains('-'))
+            {
+                int indexTiret = nom.IndexOf("-");
+
+                string codeNomCompose = nom.Substring(indexTiret + 1, 1);
+
+                codeLettresNom = nom.Substring(0, 1) + codeNomCompose;
+            }
+            else
+            {
+                codeLettresNom = nom.Substring(0, 2);
+            }
+
+            return codeLettresNom;
         }
 
         private void CreerCodeUsager(Usager usager)
         {
-            string codeFinal = "";
+            string codeFinal;
             var dernierUsager = _context.Usagers
                 .ToList()
                 .OrderByDescending(ObtenirValeurNumeroAbonne)
@@ -297,7 +293,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
 
             usager.NumAbonne = codeFinal;
         }
-
+        
         private static int ObtenirValeurNumeroAbonne(Usager usager)
         {
             return int.Parse(usager.NumAbonne.Substring(4, 4));

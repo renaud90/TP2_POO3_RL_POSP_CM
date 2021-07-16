@@ -1,10 +1,10 @@
 ﻿@model Bibliotheque_LIPAJOLI.Models.Livre
 
 @{
-    ViewData["Title"] = "Suprimmer un livre";
+    ViewData["Title"] = "Supprimer un livre";
 }
 
-<h1>Effacer</h1>
+<h1>Supprimer</h1>
 
 <h3>Êtes-vous certain de vouloir supprimer ce livre?</h3>
 <div>
@@ -57,7 +57,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="CodeLivre" />
-        <input type="submit" value="Effacer" class="btn btn-danger" /> |
+        <input type="submit" value="Supprimer" class="btn btn-danger" /> |
         <a asp-action="Index">Retour à la liste des livres</a>
     </form>
 </div>
