@@ -12,10 +12,7 @@
         <p>
             Cherchez un livre: <input type="text" name="chaineDeRecherche" value="@ViewBag.ChaineDeRecherche" />
             <label>Filtre:
-                <select name="champAFiltrer" class="form-control">
-                    <option value="Titre">Titre</option>
-                    <option value="Auteur">Auteur</option>
-                    <option value="Categorie">Catégorie</option>
+                <select name="champAFiltrer" class="form-control" asp-items="ViewBag.CategoriesFiltre">
                 </select>
             </label>
             <input type="submit" value="Chercher" class="btn btn-default" /> |

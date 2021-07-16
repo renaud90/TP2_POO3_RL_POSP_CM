@@ -26,8 +26,10 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // GET: Livres
         public async Task<IActionResult> Index(string chaineDeRecherche, string champAFiltrer)
         {
+            var categoriesFiltre = new List<string>() {"Auteur", "Categorie", "Titre"};
 
-            ViewBag.chaineDeRecherche = chaineDeRecherche;
+            ViewBag.ChaineDeRecherche = chaineDeRecherche;
+            ViewBag.CategoriesFiltre = new SelectList(categoriesFiltre, champAFiltrer);
 
             var chaineDeRechercheMajuscules = chaineDeRecherche?.ToUpper();
 
