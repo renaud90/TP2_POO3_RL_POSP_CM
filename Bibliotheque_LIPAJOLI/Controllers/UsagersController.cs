@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Bibliotheque_LIPAJOLI.Data;
-using Bibliotheque_LIPAJOLI.Extensions;
 using Bibliotheque_LIPAJOLI.Models;
+using Bibliotheque_LIPAJOLI.Services;
 
 namespace Bibliotheque_LIPAJOLI.Controllers
 {
@@ -17,11 +14,13 @@ namespace Bibliotheque_LIPAJOLI.Controllers
     {
         private readonly BibliothequeContext _context;
         private readonly IConfiguration _config;
+        private readonly IGenerateurCodeUsager _generateurCodeUsager;
 
-        public UsagersController(BibliothequeContext context, IConfiguration config)
+        public UsagersController(BibliothequeContext context, IConfiguration config, IGenerateurCodeUsager generateurCodeUsager)
         {
             _context = context;
             _config = config;
+            _generateurCodeUsager = generateurCodeUsager;
         }
 
         // GET: Usagers
@@ -111,8 +110,10 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Nom,Prenom,Statut,Email")] Usager usager)
         {
-            CreerCodeUsager(usager);
-
+            var codeUsager = _generateurCodeUsager.GenererCodeUsager(usager);
+            
+            usager.NumAbonne = codeUsager;
+            
             try
             {
                 if (ModelState.IsValid)
@@ -153,7 +154,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("NumAbonne,Nom,Prenom,Statut,Email,Defaillance")] Usager usager)
+        public async Task<IActionResult> Edit(string id, [Bind("Nom,Prenom,Statut,Email")] Usager usager)
         {
             if (id != usager.NumAbonne)
             {
@@ -241,64 +242,6 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         {
             return _context.Usagers.Any(e => e.NumAbonne == id);
         }
-
-        private string ObtenirLettresCodeUsager(Usager usager)
-        {
-            string codeLettresPrenom = CodeLettresNom(usager.Prenom);
-            string codeLettresNom = CodeLettresNom(usager.Nom);
-
-            string codeLettres = codeLettresNom + codeLettresPrenom;
-
-            return codeLettres.ToUpper().EnleverSymbolesDiacritiques();
-        }
         
-        private static string CodeLettresNom(string nom)
-        {
-            string codeLettresNom;
-            if (nom.Contains('-'))
-            {
-                int indexTiret = nom.IndexOf("-");
-
-                string codeNomCompose = nom.Substring(indexTiret + 1, 1);
-
-                codeLettresNom = nom.Substring(0, 1) + codeNomCompose;
-            }
-            else
-            {
-                codeLettresNom = nom.Substring(0, 2);
-            }
-
-            return codeLettresNom;
-        }
-
-        private void CreerCodeUsager(Usager usager)
-        {
-            string codeFinal;
-            var dernierUsager = _context.Usagers
-                .ToList()
-                .OrderByDescending(ObtenirValeurNumeroAbonne)
-                .FirstOrDefault();
-
-            if (dernierUsager == null)
-            {
-                codeFinal = ObtenirLettresCodeUsager(usager) + "0001";
-            }
-            else
-            {
-                int codeChiffres = ObtenirValeurNumeroAbonne(dernierUsager) + 1;
-
-                string codeChiffresString = codeChiffres.ToString("D4"); 
-                codeFinal = ObtenirLettresCodeUsager(usager) + codeChiffresString;
-            }
-
-            usager.NumAbonne = codeFinal;
-        }
-        
-        private static int ObtenirValeurNumeroAbonne(Usager usager)
-        {
-            return int.Parse(usager.NumAbonne.Substring(4, 4));
-        }
-
-
     }
 }
