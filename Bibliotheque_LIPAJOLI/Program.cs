@@ -19,7 +19,7 @@ namespace Bibliotheque_LIPAJOLI
             hote.Run();
         }
 
-        public static void CreerBdSiExistePas(IHost hote)
+        private static void CreerBdSiExistePas(IHost hote)
         {
             using var scope = hote.Services.CreateScope();
 
@@ -35,7 +35,7 @@ namespace Bibliotheque_LIPAJOLI
             catch (Exception ex)
             {
                 var logger = services.GetRequiredService<ILogger<Program>>();
-                logger.LogError(ex, "Une erreur est survenue lors de la création de la base de données.");
+                logger.LogError(ex, "Une erreur est survenue lors de la crÃ©ation de la base de donnÃ©es");
             }
         }
 

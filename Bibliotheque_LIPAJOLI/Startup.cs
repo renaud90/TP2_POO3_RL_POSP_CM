@@ -1,4 +1,5 @@
 using Bibliotheque_LIPAJOLI.Data;
+using Bibliotheque_LIPAJOLI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,8 @@ namespace Bibliotheque_LIPAJOLI
             services.AddDbContext<BibliothequeContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IGenerateurCodeUsager, GenerateurCodeUsager>();
+            
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddControllersWithViews();
