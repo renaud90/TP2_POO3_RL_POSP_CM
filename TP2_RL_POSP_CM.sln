@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bibliotheque_LIPAJOLI", "Bibliotheque_LIPAJOLI\Bibliotheque_LIPAJOLI.csproj", "{B7BB9673-E96B-49FF-BB15-7D0C7D2B4C5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bibliotheques.MVC", "Bibliotheques.MVC\Bibliotheques.MVC.csproj", "{B7BB9673-E96B-49FF-BB15-7D0C7D2B4C5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bibliotheques.API", "Bibliotheques.API\Bibliotheques.API.csproj", "{8FB8D676-45F4-478A-9527-73EF04EA818B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bibliotheques.ApplicationCore", "Bibliotheques.ApplicationCore\Bibliotheques.ApplicationCore.csproj", "{2A819E7F-C3A4-4D9B-92AB-F2BAFD6787DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bibliotheques.Infrastucture", "Bibliotheques.Infrastucture\Bibliotheques.Infrastucture.csproj", "{E29FA90F-CCC5-48DA-9E03-B5372D60B31B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{B7BB9673-E96B-49FF-BB15-7D0C7D2B4C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7BB9673-E96B-49FF-BB15-7D0C7D2B4C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7BB9673-E96B-49FF-BB15-7D0C7D2B4C5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FB8D676-45F4-478A-9527-73EF04EA818B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FB8D676-45F4-478A-9527-73EF04EA818B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FB8D676-45F4-478A-9527-73EF04EA818B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FB8D676-45F4-478A-9527-73EF04EA818B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A819E7F-C3A4-4D9B-92AB-F2BAFD6787DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A819E7F-C3A4-4D9B-92AB-F2BAFD6787DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A819E7F-C3A4-4D9B-92AB-F2BAFD6787DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A819E7F-C3A4-4D9B-92AB-F2BAFD6787DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E29FA90F-CCC5-48DA-9E03-B5372D60B31B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E29FA90F-CCC5-48DA-9E03-B5372D60B31B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E29FA90F-CCC5-48DA-9E03-B5372D60B31B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E29FA90F-CCC5-48DA-9E03-B5372D60B31B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

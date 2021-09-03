@@ -125,6 +125,10 @@ _ReSharper*/
 # JustCode is a .NET coding add-in
 .JustCode
 
+# Rider
+.idea/*
+.idea
+
 # TeamCity is a build add-in
 _TeamCity*
 

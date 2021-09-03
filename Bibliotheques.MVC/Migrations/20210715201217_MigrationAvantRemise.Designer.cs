@@ -18,7 +18,7 @@ namespace Bibliotheque_LIPAJOLI.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.7");
 
-            modelBuilder.Entity("Bibliotheque_LIPAJOLI.Models.Emprunt", b =>
+            modelBuilder.Entity("Bibliotheques.MVC.Models.Emprunt", b =>
                 {
                     b.Property<string>("CodeLivre")
                         .HasColumnType("TEXT");
@@ -39,7 +39,7 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                     b.ToTable("Emprunt");
                 });
 
-            modelBuilder.Entity("Bibliotheque_LIPAJOLI.Models.Livre", b =>
+            modelBuilder.Entity("Bibliotheques.MVC.Models.Livre", b =>
                 {
                     b.Property<string>("CodeLivre")
                         .HasColumnType("TEXT");
@@ -75,7 +75,7 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                     b.ToTable("Livre");
                 });
 
-            modelBuilder.Entity("Bibliotheque_LIPAJOLI.Models.Usager", b =>
+            modelBuilder.Entity("Bibliotheques.MVC.Models.Usager", b =>
                 {
                     b.Property<string>("NumAbonne")
                         .HasColumnType("TEXT");
@@ -105,15 +105,15 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                     b.ToTable("Usager");
                 });
 
-            modelBuilder.Entity("Bibliotheque_LIPAJOLI.Models.Emprunt", b =>
+            modelBuilder.Entity("Bibliotheques.MVC.Models.Emprunt", b =>
                 {
-                    b.HasOne("Bibliotheque_LIPAJOLI.Models.Livre", "Livre")
+                    b.HasOne("Bibliotheques.MVC.Models.Livre", "Livre")
                         .WithMany("Emprunts")
                         .HasForeignKey("CodeLivre")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Bibliotheque_LIPAJOLI.Models.Usager", "Usager")
+                    b.HasOne("Bibliotheques.MVC.Models.Usager", "Usager")
                         .WithMany("Emprunts")
                         .HasForeignKey("NumAbonne")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -124,12 +124,12 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                     b.Navigation("Usager");
                 });
 
-            modelBuilder.Entity("Bibliotheque_LIPAJOLI.Models.Livre", b =>
+            modelBuilder.Entity("Bibliotheques.MVC.Models.Livre", b =>
                 {
                     b.Navigation("Emprunts");
                 });
 
-            modelBuilder.Entity("Bibliotheque_LIPAJOLI.Models.Usager", b =>
+            modelBuilder.Entity("Bibliotheques.MVC.Models.Usager", b =>
                 {
                     b.Navigation("Emprunts");
                 });
