@@ -1,6 +1,6 @@
 using System;
 
-namespace Bibliotheque_LIPAJOLI.Models
+namespace Bibliotheques.ApplicationCore.Entites
 {
     public class ErrorViewModel
     {

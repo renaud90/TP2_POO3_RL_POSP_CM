@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Bibliotheque_LIPAJOLI.Data;
-using Bibliotheque_LIPAJOLI.Extensions;
-using Bibliotheque_LIPAJOLI.Models;
+using Bibliotheques.MVC.Extensions;
+using Bibliotheques.ApplicationCore.Entites;
+using Bibliotheques.Infrastucture.Data;
 
-namespace Bibliotheque_LIPAJOLI.Services
+namespace Bibliotheques.MVC.Services
 {
     public class GenerateurCodeUsager : IGenerateurCodeUsager
     {
@@ -57,7 +57,7 @@ namespace Bibliotheque_LIPAJOLI.Services
             string codeLettresNom;
             if (nom.Contains('-'))
             {
-                int indexTiret = nom.IndexOf("-");
+                int indexTiret = nom.IndexOf('-');
 
                 string codeNomCompose = nom.Substring(indexTiret + 1, 1);
 

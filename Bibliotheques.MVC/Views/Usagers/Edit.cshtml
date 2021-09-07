@@ -1,4 +1,4 @@
-﻿@model Bibliotheque_LIPAJOLI.Models.Usager
+﻿@model Bibliotheques.ApplicationCore.Entites.Usager
 
 @{
     ViewData["Title"] = "Modifier";
@@ -12,6 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="NumAbonne" />
             <div class="form-group">
                 <label asp-for="Nom" class="control-label"></label>
@@ -28,7 +29,7 @@
                 <select asp-for="Statut" class="form-control" asp-items="Html.GetEnumSelectList<Statut>()">
                     <option value="">- Sélectionner le statut -</option>
                 </select>
-                <span asp-validation-for="Statut" class="text-danger"/>
+                <span asp-validation-for="Statut" class="text-danger" />
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
@@ -36,7 +37,7 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Sauvegarder" class="btn btn-primary"/>
+                <input type="submit" value="Sauvegarder" class="btn btn-primary" />
             </div>
         </form>
     </div>

@@ -1,6 +1,6 @@
-﻿using Bibliotheque_LIPAJOLI.Models;
+﻿using Bibliotheques.ApplicationCore.Entites;
 
-namespace Bibliotheque_LIPAJOLI.Services
+namespace Bibliotheques.MVC.Services
 {
     public interface IGenerateurCodeUsager
     {

@@ -1,4 +1,4 @@
-﻿@model Bibliotheque_LIPAJOLI.Models.Usager
+﻿@model Bibliotheques.ApplicationCore.Entites.Usager
 
 @{
     ViewData["Title"] = "Supprimer";
@@ -45,7 +45,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="NumAbonne" />
+        <input type="hidden" asp-for="Id" />
         <input type="submit" value="Supprimer" class="btn btn-danger" /> |
         <a asp-action="Index">Retour à la liste des usagers</a>
     </form>

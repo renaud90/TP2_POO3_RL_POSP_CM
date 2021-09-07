@@ -1,7 +1,7 @@
 using System;
-using Bibliotheque_LIPAJOLI.Models;
+using Bibliotheques.ApplicationCore.Entites;
 
-namespace Bibliotheque_LIPAJOLI.Extensions
+namespace Bibliotheques.MVC.Extensions
 {
     public static class EmpruntExtensions
     {

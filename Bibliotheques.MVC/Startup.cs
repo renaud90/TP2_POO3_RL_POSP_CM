@@ -1,5 +1,5 @@
-using Bibliotheque_LIPAJOLI.Data;
-using Bibliotheque_LIPAJOLI.Services;
+using Bibliotheques.Infrastucture.Data;
+using Bibliotheques.MVC.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Bibliotheque_LIPAJOLI
+namespace Bibliotheques.MVC
 {
     public class Startup
     {
@@ -22,7 +22,9 @@ namespace Bibliotheque_LIPAJOLI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BibliothequeContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options
+                    .UseLazyLoadingProxies()
+                    .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IGenerateurCodeUsager, GenerateurCodeUsager>();
             

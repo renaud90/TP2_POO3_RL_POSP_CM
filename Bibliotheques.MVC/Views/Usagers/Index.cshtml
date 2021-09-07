@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Bibliotheque_LIPAJOLI.Models.Usager>
+﻿@model IEnumerable<Bibliotheques.ApplicationCore.Entites.Usager>
 
 @{
     ViewData["Title"] = "Usagers";
@@ -64,9 +64,9 @@
                 @Html.DisplayFor(modelItem => item.Defaillance)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.NumAbonne">Modifier</a> |
-                <a asp-action="Details" asp-route-id="@item.NumAbonne">Détails</a> |
-                <a asp-action="Delete" asp-route-id="@item.NumAbonne">Supprimer</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Modifier</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Détails</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
             </td>
         </tr>
 }

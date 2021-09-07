@@ -2,20 +2,22 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Bibliotheque_LIPAJOLI.Models
+namespace Bibliotheques.ApplicationCore.Entites
 {
-    public class Emprunt
+    public class Emprunt : BaseEntite
     {
         [Required, ForeignKey("Livre")]
-        public string CodeLivre { get; set; }
+        public int LivreId { get; set; }
+        
         [Required, ForeignKey("Usager")]
-        public string NumAbonne { get; set; }
+        public int UsagerId { get; set; }
         [Required]
+        
         public DateTime DateEmprunt { get; set; }
         public DateTime DateRetour { get; set; }
 
-        public Livre Livre { get; set; }
-        public Usager Usager { get; set; }
+        public virtual Livre Livre { get; set; }
+        public virtual Usager Usager { get; set; }
 
     }
 }

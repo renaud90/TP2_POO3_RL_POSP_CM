@@ -2,13 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using Bibliotheques.ApplicationCore.Entites;
+using Bibliotheques.Infrastucture.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Bibliotheque_LIPAJOLI.Data;
-using Bibliotheque_LIPAJOLI.Models;
-using Bibliotheque_LIPAJOLI.Services;
+using Bibliotheques.MVC.Services;
 
-namespace Bibliotheque_LIPAJOLI.Controllers
+namespace Bibliotheques.MVC.Controllers
 {
     public class UsagersController : Controller
     {
@@ -70,24 +70,16 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                     usagers = usagers.OrderBy(s => s.Nom);
                     break;
             }
-            return View(await usagers.AsNoTracking().ToListAsync());
+            return View(await usagers.ToListAsync());
         }
 
         // GET: Usagers/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             ViewBag.JoursLocation = _config.GetValue<int>("Bibliotheque:JoursEmprunt");
 
             var usager = await _context.Usagers
-                .Include(c => c.Emprunts)
-                .ThenInclude(e =>e.Livre)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.NumAbonne == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (usager == null)
             {
@@ -133,7 +125,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         }
 
         // GET: Usagers/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
@@ -154,9 +146,9 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Nom,Prenom,Statut,Email")] Usager usager)
+        public async Task<IActionResult> Edit(int id, [Bind("Nom,Prenom,Statut,Email")] Usager usager)
         {
-            if (id != usager.NumAbonne)
+            if (id != usager.Id)
             {
                 return NotFound();
             }
@@ -170,7 +162,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UsagerExists(usager.NumAbonne))
+                    if (!UsagerExists(usager.Id))
                     {
                         return NotFound();
                     }
@@ -188,16 +180,10 @@ namespace Bibliotheque_LIPAJOLI.Controllers
 
 
         // GET: Usagers/Delete/5
-        public async Task<IActionResult> Delete(string id, bool? saveChangesError = false)
+        public async Task<IActionResult> Delete(int id, bool? saveChangesError = false)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var usager = await _context.Usagers
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.NumAbonne == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (usager == null)
             {
@@ -217,7 +203,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // POST: Usagers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var usager = await _context.Usagers.FindAsync(id);
 
@@ -238,9 +224,9 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             }
         }
         
-        private bool UsagerExists(string id)
+        private bool UsagerExists(int id)
         {
-            return _context.Usagers.Any(e => e.NumAbonne == id);
+            return _context.Usagers.Any(e => e.Id == id);
         }
         
     }
