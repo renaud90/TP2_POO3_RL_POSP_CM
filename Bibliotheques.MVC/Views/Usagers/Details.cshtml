@@ -1,5 +1,5 @@
-﻿@model Bibliotheque_LIPAJOLI.Models.Usager
-@using Bibliotheque_LIPAJOLI.Extensions
+﻿@model Bibliotheques.ApplicationCore.Entites.Usager
+@using Bibliotheques.MVC.Extensions
 
 @{
     ViewData["Title"] = "Détails";
@@ -81,12 +81,12 @@
                         if (empruntNonRetourne && DateTime.Today > dateLimiteEmprunt)
                         {
                             <td class="font-italic en-retard">
-                                <img class="iconStatutEmprunt" src="/images/Icon_ExclamationMark.png" alt=""/>
+                                <img class="iconStatutEmprunt" src="/images/Icon_ExclamationMark.png" alt="" />
                                 Non retourné.
-                                <br/>
+                                <br />
                                 L'échéance de cet emprunt est dépassée!
-                                <br/>
-                                Date d'échéance: @dateLimiteEmprunt
+                                <br />
+                                Date d'échéance: @dateLimiteEmprunt.ToShortTimeString()
                             </td>
                         }
                         else if (empruntNonRetourne)
@@ -123,6 +123,6 @@
     }
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.NumAbonne">Modifier</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Id">Modifier</a> |
     <a asp-action="Index">Retour à la liste des usagers</a>
 </div>

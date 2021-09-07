@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bibliotheques.ApplicationCore.Entites;
+using Bibliotheques.Infrastucture.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Bibliotheque_LIPAJOLI.Data;
-using Bibliotheque_LIPAJOLI.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Bibliotheque_LIPAJOLI.Controllers
+
+namespace Bibliotheques.MVC.Controllers
 {
     public class LivresController : Controller
     {
@@ -54,18 +54,11 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         }
 
         // GET: Livres/Details/5
-        public async Task<IActionResult> Details(string id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var livre = await _context.Livres
-                .Include(l => l.Emprunts)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.CodeLivre == id)
-                ;
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (livre == null)
             {
                 return NotFound();
@@ -154,21 +147,19 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         }
 
         // GET: Livres/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
             var livre = await _context.Livres.FindAsync(id);
             if (livre == null)
             {
                 return NotFound();
             }
-            
-            ViewBag.Categories = new SelectList(_config.GetSection("Bibliotheque:Categories").Get<List<string>>());
-            ViewBag.Auteurs = new SelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>());
+
+            ViewBag.Categories = new SelectList(_config.GetSection("Bibliotheque:Categories").Get<List<string>>(),
+                livre.Categorie);
+            ViewBag.Auteurs = new MultiSelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>(), 
+                livre.Auteurs.Split(", "));
             
             return View(livre);
         }
@@ -178,15 +169,18 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("CodeLivre,Isbn10,Isbn13,Titre,Categorie,Quantite,Prix")] Livre livre, string[] auteurs)
+        public async Task<IActionResult> Edit(int id, [Bind("CodeLivre,Isbn10,Isbn13,Titre,Categorie,Quantite,Prix")] Livre livre, string[] auteurs)
         {
-            if (id != livre.CodeLivre)
+            if (id != livre.Id)
             {
                 return NotFound();
             }
             
-            ViewBag.Categories = new SelectList(_config.GetSection("Bibliotheque:Categories").Get<List<string>>());
-            ViewBag.Auteurs = new SelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>());
+            var categories = _config.GetSection("Bibliotheque:Categories").Get<List<string>>();
+
+            ViewBag.Categories = categories.Select(c => new SelectListItem
+                { Text = c, Value = c, Selected = c == livre.Categorie }).ToList();
+            ViewBag.Auteurs = new MultiSelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>(), auteurs);
             
             if (auteurs.Length == 0)
             {
@@ -213,7 +207,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LivreExists(livre.CodeLivre))
+                    if (!LivreExists(livre.Id))
                     {
                         return NotFound();
                     }
@@ -229,15 +223,10 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         }
 
         // GET: Livres/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var livre = await _context.Livres
-                .FirstOrDefaultAsync(m => m.CodeLivre == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (livre == null)
             {
                 return NotFound();
@@ -249,7 +238,7 @@ namespace Bibliotheque_LIPAJOLI.Controllers
         // POST: Livres/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var livre = await _context.Livres.FindAsync(id);
             _context.Livres.Remove(livre);
@@ -257,9 +246,9 @@ namespace Bibliotheque_LIPAJOLI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LivreExists(string id)
+        private bool LivreExists(int id)
         {
-            return _context.Livres.Any(e => e.CodeLivre == id);
+            return _context.Livres.Any(e => e.Id == id);
         }
 
     }

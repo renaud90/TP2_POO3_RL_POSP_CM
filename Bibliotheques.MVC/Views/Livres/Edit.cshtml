@@ -1,5 +1,5 @@
-﻿@using Microsoft.EntityFrameworkCore.Metadata.Internal
-@model Bibliotheque_LIPAJOLI.Models.Livre
+﻿@using Microsoft.CodeAnalysis.Classification
+@model Bibliotheques.ApplicationCore.Entites.Livre
 
 @{
     ViewData["Title"] = "Modifier un livre";
@@ -13,6 +13,7 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="CodeLivre" />
             <div class="form-group">
                 <label asp-for="Isbn10" class="control-label"></label>

@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Bibliotheque_LIPAJOLI.Migrations
+namespace Bibliotheques.Infrastucture.Migrations
 {
-    public partial class MigrationAvantRemise : Migration
+    public partial class ArchitecturePropreInitiale : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,9 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                 name: "Livre",
                 columns: table => new
                 {
-                    CodeLivre = table.Column<string>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CodeLivre = table.Column<string>(type: "TEXT", nullable: true),
                     Isbn10 = table.Column<string>(type: "TEXT", nullable: false),
                     Isbn13 = table.Column<string>(type: "TEXT", nullable: false),
                     Titre = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
@@ -22,14 +24,16 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Livre", x => x.CodeLivre);
+                    table.PrimaryKey("PK_Livre", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Usager",
                 columns: table => new
                 {
-                    NumAbonne = table.Column<string>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    NumAbonne = table.Column<string>(type: "TEXT", nullable: true),
                     Nom = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
                     Prenom = table.Column<string>(type: "TEXT", maxLength: 20, nullable: false),
                     Statut = table.Column<int>(type: "INTEGER", nullable: false),
@@ -38,39 +42,46 @@ namespace Bibliotheque_LIPAJOLI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usager", x => x.NumAbonne);
+                    table.PrimaryKey("PK_Usager", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Emprunt",
                 columns: table => new
                 {
-                    CodeLivre = table.Column<string>(type: "TEXT", nullable: false),
-                    NumAbonne = table.Column<string>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    LivreId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UsagerId = table.Column<int>(type: "INTEGER", nullable: false),
                     DateEmprunt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DateRetour = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Emprunt", x => new { x.CodeLivre, x.NumAbonne });
+                    table.PrimaryKey("PK_Emprunt", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Emprunt_Livre_CodeLivre",
-                        column: x => x.CodeLivre,
+                        name: "FK_Emprunt_Livre_LivreId",
+                        column: x => x.LivreId,
                         principalTable: "Livre",
-                        principalColumn: "CodeLivre",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Emprunt_Usager_NumAbonne",
-                        column: x => x.NumAbonne,
+                        name: "FK_Emprunt_Usager_UsagerId",
+                        column: x => x.UsagerId,
                         principalTable: "Usager",
-                        principalColumn: "NumAbonne",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Emprunt_NumAbonne",
+                name: "IX_Emprunt_LivreId_UsagerId",
                 table: "Emprunt",
-                column: "NumAbonne");
+                columns: new[] { "LivreId", "UsagerId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Emprunt_UsagerId",
+                table: "Emprunt",
+                column: "UsagerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

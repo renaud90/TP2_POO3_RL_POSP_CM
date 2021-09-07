@@ -1,4 +1,4 @@
-﻿@model Bibliotheque_LIPAJOLI.Models.Livre
+﻿@model Bibliotheques.ApplicationCore.Entites.Livre
 
 @{
     ViewData["Title"] = "Supprimer un livre";
@@ -56,7 +56,7 @@
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="CodeLivre" />
+        <input type="hidden" asp-for="Id" />
         <input type="submit" value="Supprimer" class="btn btn-danger" /> |
         <a asp-action="Index">Retour à la liste des livres</a>
     </form>

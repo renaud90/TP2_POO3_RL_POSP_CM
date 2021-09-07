@@ -1,34 +1,29 @@
 ﻿using System;
 using System.Linq;
-using Bibliotheque_LIPAJOLI.Models;
-using Microsoft.Extensions.Configuration;
+using Bibliotheques.ApplicationCore.Entites;
 
-namespace Bibliotheque_LIPAJOLI.Data
+namespace Bibliotheques.Infrastucture.Data
 {
     public static class InitialiseurBd
     {
-        public static void Initialiser(BibliothequeContext contexte, IConfiguration config)
+        public static void Initialiser(BibliothequeContext contexte, string[] auteurs)
         {
             contexte.Database.EnsureCreated();
 
             if (contexte.Livres.Any())
                 return;
-
-            var auteurs = config.GetSection("Bibliotheque:Auteurs").Get<string[]>();
             
-            // TODO : Ajouter un service qui va gérer la génération de code de livre.
-
             var livres = new Livre[]
             {
                 new Livre
                 {
-                    Titre = "Python pour les nuls 3e Édition", Isbn10 = "2-41205-3-146", Isbn13 = "978-2-41205-3-140", 
+                    Titre = "Python pour les nuls 3e Édition", Isbn10 = "2-41205-314-6", Isbn13 = "978-2-41205-314-0", 
                     Auteurs = ObtenirValeursAuHasardDe(auteurs), Categorie = "Informatique", CodeLivre = "INF001",
                     Prix = 41.95
                 },
                 new Livre
                 {
-                    Titre = "Éloquence de la sardine", Isbn10 = "2-29023-8-783", Isbn13 = "978-2-29023-8-783",
+                    Titre = "Éloquence de la sardine", Isbn10 = "2-29023-878-3", Isbn13 = "978-2-29023-878-3",
                     Auteurs = ObtenirValeursAuHasardDe(auteurs), Categorie = "Sciences", CodeLivre = "SCI001",
                     Prix = 13.95
                 }
@@ -64,46 +59,46 @@ namespace Bibliotheque_LIPAJOLI.Data
             {
                 new Emprunt()
                 {
-                    CodeLivre = contexte.Livres
+                    LivreId = contexte.Livres
                         .Single(l => l.Titre == "Python pour les nuls 3e Édition")
-                        .CodeLivre,
-                    NumAbonne = contexte.Usagers
+                        .Id,
+                    UsagerId = contexte.Usagers
                         .Single(u => u.Prenom == "Martin" && u.Nom == "Caron")
-                        .NumAbonne,
+                        .Id,
                     DateEmprunt = DateTime.Today
                 },
                 new Emprunt()
                 {
-                    CodeLivre = contexte.Livres
+                    LivreId = contexte.Livres
                         .Single(l => l.Titre == "Éloquence de la sardine")
-                        .CodeLivre,
-                    NumAbonne = contexte.Usagers
+                        .Id,
+                    UsagerId = contexte.Usagers
                         .Single(u => u.Prenom == "Eddie" && u.Nom == "Brock")
-                        .NumAbonne,
+                        .Id,
                     DateEmprunt = DateTime.Today.AddDays(-8),
                     DateRetour = DateTime.Today.AddDays(-2)
                 },
                 new Emprunt()
                 {
-                    CodeLivre = contexte.Livres
+                    LivreId = contexte.Livres
                         .Single(l => l.Titre == "Éloquence de la sardine")
-                        .CodeLivre,
-                    NumAbonne = contexte.Usagers
+                        .Id,
+                    UsagerId = contexte.Usagers
                         .Single(u => u.Prenom == "Jean-Paul" && u.Nom == "Berger")
-                        .NumAbonne,
+                        .Id,
                     DateEmprunt = DateTime.Today.AddDays(-8),
                     DateRetour = DateTime.Today
                 }, 
                 new Emprunt()
                 {
-                    CodeLivre = contexte.Livres
+                    LivreId = contexte.Livres
                         .Single(l => l.Titre == "Python pour les nuls 3e Édition")
-                        .CodeLivre,
-                    NumAbonne = contexte.Usagers
+                        .Id,
+                    UsagerId = contexte.Usagers
                         .Single(u => u.Prenom == "Eddie" && u.Nom == "Brock")
-                        .NumAbonne,
+                        .Id,
                     DateEmprunt = DateTime.Today.AddDays(-20),
-                    DateRetour = DateTime.Today.AddDays(-10)
+                    DateRetour = DateTime.Today.AddDays(-9)
                 }
             };
 

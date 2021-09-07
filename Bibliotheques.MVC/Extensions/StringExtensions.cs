@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 
-namespace Bibliotheque_LIPAJOLI.Extensions
+namespace Bibliotheques.MVC.Extensions
 {
     public static class StringExtensions
     {

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Bibliotheque_LIPAJOLI.Models.Livre>
+﻿@model IEnumerable<Bibliotheques.ApplicationCore.Entites.Livre>
 
 @{
     ViewData["Title"] = "LIPAJOLI - Livres";
@@ -60,9 +60,9 @@
                 @Html.DisplayFor(modelItem => item.Auteurs)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CodeLivre">Modifier</a> |
-                <a asp-action="Details" asp-route-id="@item.CodeLivre">Détails</a> |
-                <a asp-action="Delete" asp-route-id="@item.CodeLivre">Effacer</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Modifier</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Détails</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Effacer</a>
             </td>
         </tr>
 }

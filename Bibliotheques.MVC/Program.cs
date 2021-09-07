@@ -1,12 +1,12 @@
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using Bibliotheque_LIPAJOLI.Data;
+using Bibliotheques.Infrastucture.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Bibliotheque_LIPAJOLI
+namespace Bibliotheques.MVC
 {
     public class Program
     {
@@ -30,7 +30,7 @@ namespace Bibliotheque_LIPAJOLI
                 var contexte = services.GetRequiredService<BibliothequeContext>();
                 var config = services.GetRequiredService<IConfiguration>();
 
-                InitialiseurBd.Initialiser(contexte, config);
+                InitialiseurBd.Initialiser(contexte, config.GetSection("Bibliotheque:Auteurs").Get<string[]>());
             }
             catch (Exception ex)
             {

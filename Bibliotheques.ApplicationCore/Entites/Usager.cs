@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Bibliotheque_LIPAJOLI.Models
+namespace Bibliotheques.ApplicationCore.Entites
 {
     public enum Statut
     {
@@ -12,10 +11,8 @@ namespace Bibliotheque_LIPAJOLI.Models
         Etudiant
     }
 
-    public class Usager
+    public class Usager: BaseEntite
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Display(Name = "Numéro d'abonné")]
         public string NumAbonne { get; set; } 
 
@@ -44,12 +41,10 @@ namespace Bibliotheque_LIPAJOLI.Models
         [Display(Name = "Nombre de défaillance(s)")]
         public int Defaillance { get; set; } = 0;
 
-        public ICollection<Emprunt> Emprunts { get; set; }
+        public virtual ICollection<Emprunt> Emprunts { get; set; }
 
         public bool PeutEmprunter => Defaillance < 3;
-
-
-
+        
     }
 
 }

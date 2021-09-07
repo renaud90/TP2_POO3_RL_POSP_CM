@@ -1,7 +1,7 @@
-﻿using Bibliotheque_LIPAJOLI.Models;
+﻿using Bibliotheques.ApplicationCore.Entites;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bibliotheque_LIPAJOLI.Data
+namespace Bibliotheques.Infrastucture.Data
 {
     public class BibliothequeContext : DbContext
     {
@@ -20,7 +20,7 @@ namespace Bibliotheque_LIPAJOLI.Data
             modelBuilder.Entity<Usager>().ToTable("Usager");
 
             modelBuilder.Entity<Emprunt>().ToTable("Emprunt")
-                .HasKey(emprunt => new { emprunt.CodeLivre, emprunt.NumAbonne });
+                .HasIndex(emprunt => new { emprunt.LivreId, emprunt.UsagerId });
 
         }
     }

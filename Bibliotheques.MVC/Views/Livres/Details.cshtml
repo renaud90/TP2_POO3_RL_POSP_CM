@@ -1,4 +1,4 @@
-﻿@model Bibliotheque_LIPAJOLI.Models.Livre
+﻿@model Bibliotheques.ApplicationCore.Entites.Livre
 
 @{
     ViewData["Title"] = "Détails du livre";
@@ -66,7 +66,7 @@
 <div>
 <table class="table">
     <tr>
-        <th>Numéro d'abonné</th>
+        <th>Nom de l'abonné</th>
         <th>Date d'emprunt</th>
         <th>Est Retourné</th>
     </tr>
@@ -81,7 +81,7 @@
 
         <tr class="@classeTexteRouge">
             <td>
-                @Html.DisplayFor(modelItem => item.NumAbonne)
+                @Html.Raw($"{item.Usager.Nom}, {item.Usager.Prenom}")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateEmprunt)
@@ -103,6 +103,6 @@
 </table>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.CodeLivre">Modifier</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Id">Modifier</a> |
     <a asp-action="Index">Retour à la liste des livres</a>
 </div>
