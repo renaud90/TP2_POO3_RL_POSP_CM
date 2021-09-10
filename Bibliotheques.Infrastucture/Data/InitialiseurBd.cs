@@ -12,20 +12,20 @@ namespace Bibliotheques.Infrastucture.Data
 
             if (contexte.Livres.Any())
                 return;
-            
+
             var livres = new Livre[]
             {
                 new Livre
                 {
-                    Titre = "Python pour les nuls 3e Édition", Isbn10 = "2-41205-314-6", Isbn13 = "978-2-41205-314-0", 
+                    Titre = "Python pour les nuls 3e Édition", Isbn10 = "2-41205-314-6", Isbn13 = "978-2-41205-314-0",
                     Auteurs = ObtenirValeursAuHasardDe(auteurs), Categorie = "Informatique", CodeLivre = "INF001",
-                    Prix = 41.95
+                    Prix = 41.95, Quantite = 1
                 },
                 new Livre
                 {
                     Titre = "Éloquence de la sardine", Isbn10 = "2-29023-878-3", Isbn13 = "978-2-29023-878-3",
                     Auteurs = ObtenirValeursAuHasardDe(auteurs), Categorie = "Sciences", CodeLivre = "SCI001",
-                    Prix = 13.95
+                    Prix = 13.95, Quantite = 2
                 }
             };
 

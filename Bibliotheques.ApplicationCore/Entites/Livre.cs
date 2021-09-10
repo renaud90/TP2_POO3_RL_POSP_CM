@@ -6,6 +6,7 @@ namespace Bibliotheques.ApplicationCore.Entites
 {
     public class Livre : BaseEntite
     {
+        [Required]
         [DisplayName("Code du livre")]
         public string CodeLivre { get; set; }
         

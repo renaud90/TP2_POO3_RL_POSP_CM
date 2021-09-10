@@ -2,6 +2,7 @@
 using Bibliotheques.MVC.Extensions;
 using Bibliotheques.ApplicationCore.Entites;
 using Bibliotheques.Infrastucture.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bibliotheques.MVC.Services
 {
@@ -16,15 +17,21 @@ namespace Bibliotheques.MVC.Services
         
         public string GenererCodeUsager(Usager usager)
         {
+
             string codeFinal;
             var dernierUsager = _context.Usagers
-                .ToList()
+                .AsNoTracking()
                 .OrderByDescending(ObtenirValeurNumeroAbonne)
                 .FirstOrDefault();
 
             if (dernierUsager == null)
             {
                 codeFinal = ObtenirLettresCodeUsager(usager) + "0001";
+            }
+            else if (!string.IsNullOrEmpty(usager.NumAbonne))
+            {
+                string codeChiffresString = ObtenirValeurNumeroAbonne(usager).ToString("D4");
+                codeFinal = ObtenirLettresCodeUsager(usager) + codeChiffresString;
             }
             else
             {

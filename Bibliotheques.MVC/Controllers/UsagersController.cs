@@ -127,11 +127,6 @@ namespace Bibliotheques.MVC.Controllers
         // GET: Usagers/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var usager = await _context.Usagers.FindAsync(id);
             if (usager == null)
             {
@@ -146,18 +141,20 @@ namespace Bibliotheques.MVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Nom,Prenom,Statut,Email")] Usager usager)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NumAbonne,Nom,Prenom,Statut,Email")] Usager usager)
         {
             if (id != usager.Id)
             {
                 return NotFound();
             }
 
+            usager.NumAbonne = _generateurCodeUsager.GenererCodeUsager(usager);
+                  
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(usager);
+                    _context.Entry(usager).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

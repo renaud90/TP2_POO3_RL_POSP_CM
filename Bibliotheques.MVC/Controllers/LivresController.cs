@@ -95,7 +95,9 @@ namespace Bibliotheques.MVC.Controllers
             }
             else
             {
-                var valeurMaxCategorie = _context.Livres.Where(_ => _.Categorie == livre.Categorie)
+                var valeurMaxCategorie = _context.Livres
+                                                        .AsNoTracking()
+                                                        .Where(_ => _.Categorie == livre.Categorie)
                                                         .Select(_ => Int32.Parse(_.CodeLivre.Substring(4, 3)))
                                                         .ToList()
                                                         .Max();
@@ -169,7 +171,7 @@ namespace Bibliotheques.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CodeLivre,Isbn10,Isbn13,Titre,Categorie,Quantite,Prix")] Livre livre, string[] auteurs)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CodeLivre,Isbn10,Isbn13,Titre,Categorie,Quantite,Prix")] Livre livre, string[] auteurs)
         {
             if (id != livre.Id)
             {
@@ -178,10 +180,51 @@ namespace Bibliotheques.MVC.Controllers
             
             var categories = _config.GetSection("Bibliotheque:Categories").Get<List<string>>();
 
-            ViewBag.Categories = categories.Select(c => new SelectListItem
-                { Text = c, Value = c, Selected = c == livre.Categorie }).ToList();
+            ViewBag.Categories = new SelectList(_config.GetSection("Bibliotheque:Categories").Get<List<string>>(),
+                livre.Categorie);
             ViewBag.Auteurs = new MultiSelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>(), auteurs);
-            
+
+            if (_context.Livres.FirstOrDefault(_ => _.Categorie == livre.Categorie) == null)
+            {
+                if (livre.Categorie.Contains("-"))
+                {
+                    var mots = livre.Categorie.Split("-");
+                    livre.CodeLivre = (mots[0].Substring(0, 1) + mots[1].Substring(0, 2)).ToUpper() + "001";
+                }
+                else
+                {
+                    livre.CodeLivre = livre.Categorie.Substring(0, 3).ToUpper() + "001";
+                }
+            }
+            else
+            {
+                var valeurMaxCategorie = _context.Livres
+                                                        .AsNoTracking()
+                                                        .Where(_ => _.Categorie == livre.Categorie)
+                                                        .Select(_ => Int32.Parse(_.CodeLivre.Substring(4, 3)))
+                                                        .ToList()
+                                                        .Max();
+                var nouvelleValeurMaxCategorie = (valeurMaxCategorie + 1).ToString();
+                if (nouvelleValeurMaxCategorie.Length == 1)
+                {
+                    nouvelleValeurMaxCategorie = "00" + nouvelleValeurMaxCategorie;
+                }
+                else if (nouvelleValeurMaxCategorie.Length == 2)
+                {
+                    nouvelleValeurMaxCategorie = "0" + nouvelleValeurMaxCategorie;
+                }
+
+                if (livre.Categorie.Contains("-"))
+                {
+                    var mots = livre.Categorie.Split("-");
+                    livre.CodeLivre = (mots[0].Substring(0, 1) + mots[1].Substring(0, 2)).ToUpper() + nouvelleValeurMaxCategorie;
+                }
+                else
+                {
+                    livre.CodeLivre = livre.Categorie.Substring(0, 3).ToUpper() + nouvelleValeurMaxCategorie;
+                }
+            }
+
             if (auteurs.Length == 0)
             {
                 ModelState.AddModelError("Auteurs", "Ce champ est requis.");

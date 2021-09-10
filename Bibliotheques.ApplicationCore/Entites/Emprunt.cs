@@ -11,8 +11,8 @@ namespace Bibliotheques.ApplicationCore.Entites
         
         [Required, ForeignKey("Usager")]
         public int UsagerId { get; set; }
-        [Required]
         
+        [Required]
         public DateTime DateEmprunt { get; set; }
         public DateTime DateRetour { get; set; }
 

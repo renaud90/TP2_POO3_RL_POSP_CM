@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bibliotheques.ApplicationCore.Entites
 {
@@ -13,6 +12,7 @@ namespace Bibliotheques.ApplicationCore.Entites
 
     public class Usager: BaseEntite
     {
+        [Required]
         [Display(Name = "Numéro d'abonné")]
         public string NumAbonne { get; set; } 
 

@@ -3,14 +3,16 @@ using System;
 using Bibliotheques.Infrastucture.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bibliotheques.Infrastucture.Migrations
 {
     [DbContext(typeof(BibliothequeContext))]
-    partial class BibliothequeContextModelSnapshot : ModelSnapshot
+    [Migration("20210910193732_AjoutChampsRequis")]
+    partial class AjoutChampsRequis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
