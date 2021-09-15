@@ -1,0 +1,97 @@
+﻿@model Bibliotheques.ApplicationCore.Entites.Emprunt
+@using Bibliotheques.MVC.Extensions 
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Modifier</h1>
+
+<div>
+
+    @{
+        var dateLimiteEmprunt = Model.ObtenirDateLimite((int)ViewBag.JoursLocation);
+        var empruntRetourneEnRetard = Model.DateRetour > dateLimiteEmprunt.Date;
+        var empruntNonRetourne = Model.DateRetour == DateTime.MinValue;
+
+        if (empruntNonRetourne && DateTime.Today > dateLimiteEmprunt)
+        {
+            <h4 class="font-italic en-retard">
+                  l'emprunt du  @Html.DisplayFor(model => model.DateEmprunt) par @Html.DisplayFor(model => model.Usager.Prenom) @Html.DisplayFor(model => model.Usager.Nom) <img class="iconStatutEmprunt" src="/images/Icon_ExclamationMark.png" alt="" />
+            </h4>
+        }
+        else if (empruntNonRetourne)
+        {
+            <h4 class="en-attente">
+                  l'emprunt du  @Html.DisplayFor(model => model.DateEmprunt) par @Html.DisplayFor(model => model.Usager.Prenom) @Html.DisplayFor(model => model.Usager.Nom) <img class="iconStatutEmprunt" src="/images/Icon_Pending.png" alt="" />
+            </h4>
+        }
+        else if (empruntRetourneEnRetard)
+        {
+            <h4 class="en-retard">
+                  l'emprunt du  @Html.DisplayFor(model => model.DateEmprunt) par @Html.DisplayFor(model => model.Usager.Prenom) @Html.DisplayFor(model => model.Usager.Nom) <img class="iconStatutEmprunt" src="/images/Icon_ExclamationMark.png" alt="" />
+            </h4>
+        }
+        else
+        {
+            <h4 id="retourne">
+                  l'emprunt du  @Html.DisplayFor(model => model.DateEmprunt) par @Html.DisplayFor(model => model.Usager.Prenom) @Html.DisplayFor(model => model.Usager.Nom) <img class="iconStatutEmprunt" src="/images/Icon_Checkmark.png" alt="" />
+            </h4>
+        }
+    }
+
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h5>Informations de l'emprunteur</h5>
+            <div class="form-group">
+                <label asp-for="Usager.Prenom" class="control-label"></label>
+                <input asp-for="Usager.Prenom" class="form-control" />
+                <span asp-validation-for="Usager.Prenom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usager.Nom" class="control-label"></label>
+                <input asp-for="Usager.Nom" class="form-control" />
+                <span asp-validation-for="Usager.Nom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Usager.NumAbonne" class="control-label"></label>
+                <input asp-for="Usager.NumAbonne" class="form-control" />
+                <span asp-validation-for="Usager.NumAbonne" class="text-danger"></span>
+            </div>
+            <hr />
+            <h5>Informations du livre emprunté</h5>
+            <div class="form-group">
+                <label asp-for="Livre.Titre" class="control-label"></label>
+                <input asp-for="Livre.Titre" class="form-control" />
+                <span asp-validation-for="Livre.Titre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livre.Isbn13" class="control-label"></label>
+                <input asp-for="Livre.Isbn13" class="form-control" />
+                <span asp-validation-for="Livre.Isbn13" class="text-danger"></span>
+            </div>
+            <hr />
+            <h5>Date de l'emprunt</h5>
+            <div class="form-group">
+                <input asp-for="DateEmprunt" class="form-control" />
+                <span asp-validation-for="DateEmprunt" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <input type="submit" value="Sauvegarder" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Retour à la liste des emprunts</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

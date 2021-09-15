@@ -17,11 +17,12 @@ namespace Bibliotheques.ApplicationCore.Entites
         
         [Required(ErrorMessage = "Ce champ est requis")]
         [RegularExpression(@"^[0-9]{3}-[0-9]-[0-9]{5}-[0-9]{3}-[0-9]", ErrorMessage = "La valeur doit avoir le format 555-5-55555-555-5.")]
-        [DisplayName("n° ISBN13")]
+        [Display(Name = "n° ISBN13", Prompt = "Entrez le code ISBN du livre")]
         public string Isbn13 { get; set; }
         
         [Required(ErrorMessage = "Ce champ est requis.")]
         [MaxLength(200, ErrorMessage = "La titre doit comporter un maximum de 200 caractères.")]
+        [Display(Prompt="Entrez le titre du livre")]
         public string Titre { get; set; }
         
         [DisplayName("Catégorie")]
