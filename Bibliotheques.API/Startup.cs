@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Bibliotheques.Infrastructure.Repositories;
 using Bibliotheques.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Bibliotheques.API
 {
@@ -32,16 +33,17 @@ namespace Bibliotheques.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<BibliothequeContext>(options =>
                 options
-                    //.UseLazyLoadingProxies()
+                    .UseLazyLoadingProxies()
                     .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             //services.AddScoped(typeof(IAsyncRepository<>), typeof(AsyncRepository<>));
             services.AddScoped<IAsyncRepository<Emprunt>, EmpruntAsyncRepository>();
             services.AddScoped<IBibliothequeService, BibliothequeService>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bibliotheques.API", Version = "v1" });

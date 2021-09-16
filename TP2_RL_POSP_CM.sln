@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bibliotheques.API", "Biblio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bibliotheques.ApplicationCore", "Bibliotheques.ApplicationCore\Bibliotheques.ApplicationCore.csproj", "{2A819E7F-C3A4-4D9B-92AB-F2BAFD6787DC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bibliotheques.Infrastructure", "Bibliotheques.Infrastucture\Bibliotheques.Infrastructure.csproj", "{E29FA90F-CCC5-48DA-9E03-B5372D60B31B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bibliotheques.Infrastructure", "Bibliotheques.Infrastructure\Bibliotheques.Infrastructure.csproj", "{E29FA90F-CCC5-48DA-9E03-B5372D60B31B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

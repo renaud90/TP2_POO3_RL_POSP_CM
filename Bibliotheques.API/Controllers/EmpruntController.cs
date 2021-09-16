@@ -38,7 +38,7 @@ namespace Bibliotheques.API.Controllers
         public async Task<ActionResult<Emprunt>> Post([FromBody] Emprunt emprunt)
         {
             await _crudService.AjouterEmprunt(emprunt);
-            return CreatedAtAction("GetEmprunt", new { id = emprunt.Id}, emprunt);
+            return CreatedAtAction(nameof(Post), new { id = emprunt.Id}, emprunt);
         }
 
         // PUT api/<EmpruntController>/5

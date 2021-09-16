@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Bibliotheques.Infrastructure.Repositories
@@ -20,10 +19,7 @@ namespace Bibliotheques.Infrastructure.Repositories
         }
         
         public async Task<Emprunt> ObtenirParIdAsync(int id) {
-            return await _context.Set<Emprunt>()
-                .Include(_ => _.Livre)
-                .Include(_ => _.Usager)
-                .FirstOrDefaultAsync(_ => _.Id == id);            
+            return await _context.Set<Emprunt>().FirstOrDefaultAsync(_ => _.Id == id);            
         }
 
         public async Task<IEnumerable<Emprunt>> ObtenirToutAsync()

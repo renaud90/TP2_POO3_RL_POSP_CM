@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace Bibliotheques.ApplicationCore.Entites
 {
@@ -41,6 +42,7 @@ namespace Bibliotheques.ApplicationCore.Entites
         [Display(Name = "Nombre de défaillance(s)")]
         public int Defaillance { get; set; } = 0;
 
+        [JsonIgnore]
         public virtual ICollection<Emprunt> Emprunts { get; set; }
 
         public bool PeutEmprunter => Defaillance < 3;
