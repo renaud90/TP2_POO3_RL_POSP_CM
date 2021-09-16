@@ -11,44 +11,47 @@ using System.Threading.Tasks;
 
 namespace Bibliotheques.Infrastructure.Repositories
 {
-    public class AsyncRepository<T>: IAsyncRepository<T> where T: BaseEntite
+    public class EmpruntAsyncRepository: IAsyncRepository<Emprunt> //where T: BaseEntite
     {
         private readonly BibliothequeContext _context;
-        public AsyncRepository(BibliothequeContext context)
+        public EmpruntAsyncRepository(BibliothequeContext context)
         {
             _context = context;
         }
-
-        public async Task<T> ObtenirParIdAsync(int id) {
-            return await _context.Set<T>().FirstOrDefaultAsync(_ => _.Id == id);
+        
+        public async Task<Emprunt> ObtenirParIdAsync(int id) {
+            return await _context.Set<Emprunt>()
+                .Include(_ => _.Livre)
+                .Include(_ => _.Usager)
+                .FirstOrDefaultAsync(_ => _.Id == id);            
         }
 
-        public async Task<IEnumerable<T>> ObtenirToutAsync()
+        public async Task<IEnumerable<Emprunt>> ObtenirToutAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<Emprunt>().ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> ObtenirListeAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<Emprunt>> ObtenirListeAsync(Expression<Func<Emprunt, bool>> predicate)
         {
-            return await _context.Set<T>().Where(predicate).ToListAsync();
+            return await _context.Set<Emprunt>().Where(predicate).ToListAsync();
         }
 
-        public async Task AjouterAsync(T entite) 
+        public async Task AjouterAsync(Emprunt entite) 
         {
-            await _context.Set<T>().AddAsync(entite);
+            await _context.Set<Emprunt>().AddAsync(entite);
             await _context.SaveChangesAsync();
         }
 
-        public async Task SupprimerAsync(T entite) 
+        public async Task SupprimerAsync(Emprunt entite) 
         {
             
-            _context.Set<T>().Remove(entite);
+            _context.Set<Emprunt>().Remove(entite);
             await _context.SaveChangesAsync();
         }
 
-        public async Task ModifierAsync(T entite)
+        public async Task ModifierAsync(Emprunt entite)
         {
-            _context.Set<T>().Update(entite);
+            _context.Set<Emprunt>().Update(entite);
             await _context.SaveChangesAsync();
         }
     }

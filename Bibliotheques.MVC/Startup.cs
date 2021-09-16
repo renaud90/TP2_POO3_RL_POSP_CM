@@ -27,7 +27,7 @@ namespace Bibliotheques.MVC
         {
             services.AddDbContext<BibliothequeContext>(options =>
                 options
-                    .UseLazyLoadingProxies()
+                    //.UseLazyLoadingProxies()
                     .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IGenerateurCodeUsager, GenerateurCodeUsager>();

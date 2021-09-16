@@ -20,7 +20,8 @@ namespace Bibliotheques.ApplicationCore.Services
 
         public async Task<Emprunt> ObtenirEmpruntParId(int id)
         {
-            return await _empruntsRepository.ObtenirParIdAsync(id);
+            return await _empruntsRepository
+                .ObtenirParIdAsync(id);
         }
 
         public async Task<IEnumerable<Emprunt>> ObtenirTousLesEmprunts()
