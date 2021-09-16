@@ -1,42 +1,95 @@
 ﻿@model Bibliotheques.ApplicationCore.Entites.Emprunt
+@using Bibliotheques.MVC.Extensions
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Détails</h1>
 
 <div>
-    <h4>Emprunt</h4>
+
+    @{
+        var dateLimiteEmprunt = Model.ObtenirDateLimite((int)ViewBag.JoursLocation);
+        var empruntRetourneEnRetard = Model.DateRetour > dateLimiteEmprunt.Date;
+        var empruntNonRetourne = Model.DateRetour == DateTime.MinValue;
+
+        if (empruntNonRetourne && DateTime.Today > dateLimiteEmprunt)
+        {
+            <h4 class="font-italic en-retard">
+                Emprunt du  @Html.DisplayFor(model => model.DateEmprunt) par @Html.DisplayFor(model => model.Usager.Prenom) @Html.DisplayFor(model => model.Usager.Nom) <img class="iconStatutEmprunt" src="/images/Icon_ExclamationMark.png" alt="" />
+            </h4>
+        }
+        else if (empruntNonRetourne)
+        {
+            <h4 class="en-attente">
+                Emprunt du  @Html.DisplayFor(model => model.DateEmprunt) par @Html.DisplayFor(model => model.Usager.Prenom) @Html.DisplayFor(model => model.Usager.Nom) <img class="iconStatutEmprunt" src="/images/Icon_Pending.png" alt="" />
+            </h4>
+        }
+        else if (empruntRetourneEnRetard)
+        {
+            <h4 class="en-retard">
+                Emprunt du  @Html.DisplayFor(model => model.DateEmprunt) par @Html.DisplayFor(model => model.Usager.Prenom) @Html.DisplayFor(model => model.Usager.Nom) <img class="iconStatutEmprunt" src="/images/Icon_ExclamationMark.png" alt="" />
+            </h4>
+        }
+        else
+        {
+            <h4 id="retourne">
+                Emprunt du  @Html.DisplayFor(model => model.DateEmprunt) par @Html.DisplayFor(model => model.Usager.Prenom) @Html.DisplayFor(model => model.Usager.Nom) <img class="iconStatutEmprunt" src="/images/Icon_Checkmark.png" alt="" />
+            </h4>
+        }
+    }
+
+</div>
+
+<div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Usager.Prenom)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Usager.Prenom)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Usager.Nom)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Usager.Nom)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Usager.NumAbonne)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Usager.NumAbonne)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Livre.Titre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Livre.Titre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Livre.Isbn13)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Livre.Isbn13)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DateEmprunt)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DateEmprunt)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DateRetour)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DateRetour)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Livre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Livre.Categorie)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Usager)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Usager.Email)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Modifier</a> |
+    <a asp-action="Index">Retour à la liste des emprunts</a>
 </div>

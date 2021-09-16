@@ -4,41 +4,60 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Créer</h1>
 
-<h4>Emprunt</h4>
+<h4>Un nouvel emprunt</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h5>Informations de l'emprunteur</h5>
             <div class="form-group">
-                <label asp-for="LivreId" class="control-label"></label>
-                <select asp-for="LivreId" class ="form-control" asp-items="ViewBag.LivreId"></select>
+                <label asp-for="Usager.Prenom" class="control-label"></label>
+                <input asp-for="Usager.Prenom" class="form-control" />
+                <span asp-validation-for="Usager.Prenom" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UsagerId" class="control-label"></label>
-                <select asp-for="UsagerId" class ="form-control" asp-items="ViewBag.UsagerId"></select>
+                <label asp-for="Usager.Nom" class="control-label"></label>
+                <input asp-for="Usager.Nom" class="form-control" />
+                <span asp-validation-for="Usager.Nom" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateEmprunt" class="control-label"></label>
+                <label asp-for="Usager.NumAbonne" class="control-label"></label>
+                <input asp-for="Usager.NumAbonne" class="form-control" />
+                <span asp-validation-for="Usager.NumAbonne" class="text-danger"></span>
+            </div>
+            <hr />
+            <h5>Informations du livre emprunté</h5>
+            <div class="form-group">
+                <label asp-for="Livre.Titre" class="control-label"></label>
+                <input asp-for="Livre.Titre" class="form-control" />
+                <span asp-validation-for="Livre.Titre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Livre.Isbn13" class="control-label"></label>
+                <input asp-for="Livre.Isbn13" class="form-control" />
+                <span asp-validation-for="Livre.Isbn13" class="text-danger"></span>
+            </div>
+            <hr />
+            <h5>Date de l'emprunt</h5>
+            <div class="form-group">
                 <input asp-for="DateEmprunt" class="form-control" />
                 <span asp-validation-for="DateEmprunt" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateRetour" class="control-label"></label>
-                <input asp-for="DateRetour" class="form-control" />
-                <span asp-validation-for="DateRetour" class="text-danger"></span>
+
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Créer" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Retour à la liste des emprunts</a>
 </div>
 
 @section Scripts {
