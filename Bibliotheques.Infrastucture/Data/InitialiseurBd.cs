@@ -2,7 +2,7 @@
 using System.Linq;
 using Bibliotheques.ApplicationCore.Entites;
 
-namespace Bibliotheques.Infrastucture.Data
+namespace Bibliotheques.Infrastructure.Data
 {
     public static class InitialiseurBd
     {

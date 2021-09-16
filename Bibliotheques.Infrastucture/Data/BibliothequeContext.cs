@@ -1,7 +1,7 @@
 ﻿using Bibliotheques.ApplicationCore.Entites;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bibliotheques.Infrastucture.Data
+namespace Bibliotheques.Infrastructure.Data
 {
     public class BibliothequeContext : DbContext
     {

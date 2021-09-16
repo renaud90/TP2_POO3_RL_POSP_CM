@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Bibliotheques.Infrastucture.Migrations
+namespace Bibliotheques.Infrastructure.Migrations
 {
     public partial class ArchitecturePropreInitiale : Migration
     {

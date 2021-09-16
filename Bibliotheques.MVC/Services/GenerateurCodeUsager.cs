@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Bibliotheques.MVC.Extensions;
 using Bibliotheques.ApplicationCore.Entites;
-using Bibliotheques.Infrastucture.Data;
+using Bibliotheques.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bibliotheques.MVC.Services

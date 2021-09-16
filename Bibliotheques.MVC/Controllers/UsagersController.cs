@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Bibliotheques.ApplicationCore.Entites;
-using Bibliotheques.Infrastucture.Data;
+using Bibliotheques.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Bibliotheques.MVC.Services;
