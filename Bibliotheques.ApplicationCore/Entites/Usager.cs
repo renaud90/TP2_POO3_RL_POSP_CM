@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace Bibliotheques.ApplicationCore.Entites
 {
@@ -13,19 +13,20 @@ namespace Bibliotheques.ApplicationCore.Entites
 
     public class Usager: BaseEntite
     {
-        [Display(Name = "Numéro d'abonné")]
+        [Required]
+        [Display(Name = "Numéro d'abonné", Prompt = "Entrez le numéro d'abonné")]
         public string NumAbonne { get; set; } 
 
         [Required(ErrorMessage = "Veuillez renseigner ce champ")]
         [StringLength(30, MinimumLength = 2, ErrorMessage = "Ce champ doit comporter au moins 2 caractères et est limité à 30")]
         [RegularExpression(@"^[A-zÀ-ú\-]*$", ErrorMessage = "Ce champ ne doit comporter que des lettres")]
-        [Display(Name = "Nom de famille", Prompt = "Entrez votre nom de famille")]
+        [Display(Name = "Nom de famille", Prompt = "Entrez le nom de famille de l'abonné")]
         public string Nom { get; set; }
 
         [Required(ErrorMessage = "Veuillez renseigner ce champ")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "Ce champ doit comporter au moins 2 caractères et est limité à 20")]
         [RegularExpression(@"^[A-zÀ-ú\-]*$", ErrorMessage = "Ce champ ne doit comporter que des lettres")]
-        [Display(Name = "Prénom", Prompt = "Entrez votre prénom")]
+        [Display(Name = "Prénom", Prompt = "Entrez le prénom de l'abonné")]
         public string Prenom { get; set; }
 
         [Required(ErrorMessage = "Veuillez renseigner ce champ")]
@@ -41,6 +42,7 @@ namespace Bibliotheques.ApplicationCore.Entites
         [Display(Name = "Nombre de défaillance(s)")]
         public int Defaillance { get; set; } = 0;
 
+        [JsonIgnore]
         public virtual ICollection<Emprunt> Emprunts { get; set; }
 
         public bool PeutEmprunter => Defaillance < 3;

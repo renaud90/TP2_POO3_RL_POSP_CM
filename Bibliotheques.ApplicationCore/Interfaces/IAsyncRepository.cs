@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Bibliotheques.ApplicationCore.Entites;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bibliotheques.ApplicationCore.Interfaces
 {

@@ -1,4 +1,4 @@
-using Bibliotheques.Infrastucture.Data;
+using Bibliotheques.Infrastructure.Data;
 using Bibliotheques.MVC.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using Bibliotheques.MVC.Proxies;
+using Bibliotheques.ApplicationCore.Interfaces;
+using Bibliotheques.ApplicationCore.Services;
 
 namespace Bibliotheques.MVC
 {
@@ -31,6 +35,8 @@ namespace Bibliotheques.MVC
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddControllersWithViews();
+
+            services.AddHttpClient<IBibliothequeService, BibliothequeServiceProxy>(client => client.BaseAddress = new Uri(Configuration.GetValue<string>("UrlBibliothequeAPI")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

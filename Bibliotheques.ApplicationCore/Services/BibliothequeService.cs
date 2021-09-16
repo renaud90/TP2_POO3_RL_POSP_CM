@@ -4,6 +4,8 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Bibliotheques.ApplicationCore.Entites;
 using Bibliotheques.ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace Bibliotheques.ApplicationCore.Services
 {
@@ -18,7 +20,8 @@ namespace Bibliotheques.ApplicationCore.Services
 
         public async Task<Emprunt> ObtenirEmpruntParId(int id)
         {
-            return await _empruntsRepository.ObtenirParIdAsync(id);
+            return await _empruntsRepository
+                .ObtenirParIdAsync(id);
         }
 
         public async Task<IEnumerable<Emprunt>> ObtenirTousLesEmprunts()
@@ -49,10 +52,16 @@ namespace Bibliotheques.ApplicationCore.Services
             await _empruntsRepository.ModifierAsync(emprunt);
         }
 
+        public async Task EffacerEmprunt(int id)
+        {
+            Emprunt emprunt = await _empruntsRepository.ObtenirParIdAsync(id);
+            await _empruntsRepository.SupprimerAsync(emprunt);
+        }
+
         private async Task<bool> EmpruntExiste(Emprunt emprunt)
         {
             var empruntDansRepo = await _empruntsRepository.ObtenirParIdAsync(emprunt.Id);
-            
+
             return empruntDansRepo != null;
         }
     }
