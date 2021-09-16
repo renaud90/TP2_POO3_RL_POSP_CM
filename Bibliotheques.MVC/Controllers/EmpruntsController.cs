@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bibliotheques.ApplicationCore.Entites;
-using Bibliotheques.Infrastucture.Data;
+using Bibliotheques.Infrastructure.Data;
 using Microsoft.Extensions.Configuration;
 using Bibliotheques.MVC.Services;
 
@@ -14,14 +14,14 @@ namespace Bibliotheques.MVC.Controllers
 {
     public class EmpruntsController : Controller
     {
-        private readonly IBibliothequeService _bibliothequeProxy;
+        //private readonly IBibliothequeService _bibliothequeProxy;
         private readonly BibliothequeContext _context;
         private readonly IConfiguration _config;
         private readonly IGenerateurCodeUsager _generateurCodeUsager;
 
         public EmpruntsController(BibliothequeContext context, IConfiguration config, IGenerateurCodeUsager generateurCodeUsager)
         {
-            _bibliothequeProxy = bibliothequeService;
+            //_bibliothequeProxy = bibliothequeService;
             _context = context;
             _config = config;
             _generateurCodeUsager = generateurCodeUsager;
@@ -144,7 +144,7 @@ namespace Bibliotheques.MVC.Controllers
 
             var emprunt = await _context.Emprunts.FindAsync(id);
 
-            var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
+            //var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
             if (emprunt == null)
             {
                 return NotFound();

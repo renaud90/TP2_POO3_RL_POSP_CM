@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bibliotheques.Infrastructure.Repositories;
+using Bibliotheques.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bibliotheques.API
 {
@@ -30,15 +32,22 @@ namespace Bibliotheques.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
+            services.AddDbContext<BibliothequeContext>(options =>
+                options
+                    .UseLazyLoadingProxies()
+                    .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(AsyncRepository<>));
+            services.AddScoped<IBibliothequeService, BibliothequeService>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bibliotheques.API", Version = "v1" });
             });
 
-            services.AddScoped<IBibliothequeService, BibliothequeService>();
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(AsyncRepository<>));
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
