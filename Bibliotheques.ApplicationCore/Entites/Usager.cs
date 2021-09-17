@@ -41,10 +41,10 @@ namespace Bibliotheques.ApplicationCore.Entites
         //TP2.2: Dans Controller ajouter loop qui compte les insatnces dont DateTime.Now>DateEmprunt+this.ObtenirJoursEmprunt()
         [Display(Name = "Nombre de défaillance(s)")]
         public int Defaillance { get; set; } = 0;
-
+        
         [JsonIgnore]
         public virtual ICollection<Emprunt> Emprunts { get; set; }
-
+        
         public bool PeutEmprunter => Defaillance < 3;
         
     }

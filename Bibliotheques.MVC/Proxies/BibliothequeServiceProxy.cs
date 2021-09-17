@@ -14,7 +14,9 @@ namespace Bibliotheques.MVC.Proxies
     public class BibliothequeServiceProxy : IBibliothequeService
     {
         private readonly HttpClient _httpClient;
-        private const string _bibliothequeApiUrl = "api/Emprunt";
+        private const string _empruntsApiUrl = "api/Emprunts/";
+        private const string _livresApiUrl = "api/Livres/";
+        private const string _usagersApiUrl = "api/Usagers/";
 
         public BibliothequeServiceProxy(HttpClient httpClient)
         {
@@ -22,25 +24,36 @@ namespace Bibliotheques.MVC.Proxies
         }
 
         public async Task<Emprunt> ObtenirEmpruntParId(int id) {
-            return await _httpClient.GetFromJsonAsync<Emprunt>(_bibliothequeApiUrl + id);
+            return await _httpClient.GetFromJsonAsync<Emprunt>(_empruntsApiUrl + id);
         }
+        
         public async Task<IEnumerable<Emprunt>> ObtenirTousLesEmprunts() {
-            return await _httpClient.GetFromJsonAsync<List<Emprunt>>(_bibliothequeApiUrl);
+            return await _httpClient.GetFromJsonAsync<IEnumerable<Emprunt>>(_empruntsApiUrl);
         }
-        //Task<IEnumerable<Emprunt>> ObtenirListeEmprunts(Expression<Func<Emprunt, bool>> predicat) { }
+        
         public async Task AjouterEmprunt(Emprunt emprunt) {
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(emprunt), Encoding.UTF8, "application/json");
 
-            await _httpClient.PostAsync(_bibliothequeApiUrl, content);
+            await _httpClient.PostAsync(_empruntsApiUrl, content);
         }
         public async Task ModifierEmprunt(Emprunt emprunt) {
             StringContent content = new StringContent(JsonConvert.SerializeObject(emprunt), Encoding.UTF8, "application/json");
 
-            await _httpClient.PutAsync(_bibliothequeApiUrl, content);
+            await _httpClient.PutAsync(_empruntsApiUrl, content);
         }
         public async Task EffacerEmprunt(int id) {
-            await _httpClient.DeleteAsync(_bibliothequeApiUrl + id);
+            await _httpClient.DeleteAsync(_empruntsApiUrl + id);
+        }
+        
+        public async Task<IEnumerable<Livre>> ObtenirTousLesLivres()
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<Livre>>(_livresApiUrl);
+        }
+
+        public async Task<IEnumerable<Usager>> ObtenirTousLesUsagers()
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<Usager>>(_usagersApiUrl);
         }
     }
 }

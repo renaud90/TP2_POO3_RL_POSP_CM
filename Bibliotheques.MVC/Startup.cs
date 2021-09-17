@@ -32,11 +32,11 @@ namespace Bibliotheques.MVC
 
             services.AddScoped<IGenerateurCodeUsager, GenerateurCodeUsager>();
             
+            services.AddHttpClient<IBibliothequeService, BibliothequeServiceProxy>(client => client.BaseAddress = new Uri(Configuration.GetValue<string>("UrlBibliothequeAPI")));
+            
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddControllersWithViews();
-
-            services.AddHttpClient<IBibliothequeService, BibliothequeServiceProxy>(client => client.BaseAddress = new Uri(Configuration.GetValue<string>("UrlBibliothequeAPI")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

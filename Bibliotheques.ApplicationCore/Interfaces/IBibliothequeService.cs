@@ -11,9 +11,10 @@ namespace Bibliotheques.ApplicationCore.Interfaces
     {
         Task<Emprunt> ObtenirEmpruntParId(int id);
         Task<IEnumerable<Emprunt>> ObtenirTousLesEmprunts();
-        //Task<IEnumerable<Emprunt>> ObtenirListeEmprunts(Expression<Func<Emprunt, bool>> predicat);
         Task AjouterEmprunt(Emprunt emprunt);
         Task ModifierEmprunt(Emprunt emprunt);
         Task EffacerEmprunt(int id);
+        Task<IEnumerable<Livre>> ObtenirTousLesLivres();
+        Task<IEnumerable<Usager>> ObtenirTousLesUsagers();
     }
 }

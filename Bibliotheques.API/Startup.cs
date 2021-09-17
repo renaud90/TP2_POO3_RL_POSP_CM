@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Bibliotheques.Infrastructure.Repositories;
 using Bibliotheques.Infrastructure.Data;
@@ -37,7 +38,7 @@ namespace Bibliotheques.API
                 options
                     .UseLazyLoadingProxies()
                     .UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            //services.AddScoped(typeof(IAsyncRepository<>), typeof(AsyncRepository<>));
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(AsyncRepository<>));
             services.AddScoped<IAsyncRepository<Emprunt>, EmpruntAsyncRepository>();
             services.AddScoped<IBibliothequeService, BibliothequeService>();
 
