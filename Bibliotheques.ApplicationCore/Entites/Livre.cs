@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
+
 namespace Bibliotheques.ApplicationCore.Entites
 {
     public class Livre : BaseEntite

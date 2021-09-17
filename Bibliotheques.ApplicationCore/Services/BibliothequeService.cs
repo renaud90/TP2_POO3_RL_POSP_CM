@@ -12,10 +12,14 @@ namespace Bibliotheques.ApplicationCore.Services
     public class BibliothequeService : IBibliothequeService
     {
         private readonly IAsyncRepository<Emprunt> _empruntsRepository;
+        private readonly IAsyncRepository<Livre> _livresRepository;
+        private readonly IAsyncRepository<Usager> _usagersRepository;
 
-        public BibliothequeService(IAsyncRepository<Emprunt> empruntsRepository)
+        public BibliothequeService(IAsyncRepository<Emprunt> empruntsRepository, IAsyncRepository<Livre> livresRepository, IAsyncRepository<Usager> usagersRepository)
         {
             _empruntsRepository = empruntsRepository;
+            _livresRepository = livresRepository;
+            _usagersRepository = usagersRepository;
         }
 
         public async Task<Emprunt> ObtenirEmpruntParId(int id)
@@ -58,11 +62,22 @@ namespace Bibliotheques.ApplicationCore.Services
             await _empruntsRepository.SupprimerAsync(emprunt);
         }
 
+        public async Task<IEnumerable<Livre>> ObtenirTousLesLivres()
+        {
+            return await _livresRepository.ObtenirToutAsync();
+        }
+        
+        public async Task<IEnumerable<Usager>> ObtenirTousLesUsagers()
+        {
+            return await _usagersRepository.ObtenirToutAsync();
+        }
+
         private async Task<bool> EmpruntExiste(Emprunt emprunt)
         {
             var empruntDansRepo = await _empruntsRepository.ObtenirParIdAsync(emprunt.Id);
 
             return empruntDansRepo != null;
         }
+        
     }
 }

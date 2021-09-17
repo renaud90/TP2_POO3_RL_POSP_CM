@@ -10,11 +10,11 @@ namespace Bibliotheques.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmpruntController : ControllerBase
+    public class EmpruntsController : ControllerBase
     {
         private readonly IBibliothequeService _crudService;
 
-        public EmpruntController(IBibliothequeService crudService)
+        public EmpruntsController(IBibliothequeService crudService)
         {
             _crudService = crudService;
         }

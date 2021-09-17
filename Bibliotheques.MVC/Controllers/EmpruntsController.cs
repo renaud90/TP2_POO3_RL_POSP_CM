@@ -1,29 +1,23 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bibliotheques.ApplicationCore.Entites;
-using Bibliotheques.Infrastructure.Data;
+using Bibliotheques.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Configuration;
-using Bibliotheques.MVC.Services;
 
 namespace Bibliotheques.MVC.Controllers
 {
     public class EmpruntsController : Controller
     {
-        //private readonly IBibliothequeService _bibliothequeProxy;
-        private readonly BibliothequeContext _context;
+        private readonly IBibliothequeService _bibliothequeProxy;
         private readonly IConfiguration _config;
-        private readonly IGenerateurCodeUsager _generateurCodeUsager;
 
-        public EmpruntsController(BibliothequeContext context, IConfiguration config, IGenerateurCodeUsager generateurCodeUsager)
+        public EmpruntsController(IBibliothequeService bibliothequeProxy, IConfiguration config)
         {
-            //_bibliothequeProxy = bibliothequeService;
-            _context = context;
+            _bibliothequeProxy = bibliothequeProxy;
             _config = config;
-            _generateurCodeUsager = generateurCodeUsager;
         }
 
         // GET: Emprunts
@@ -32,19 +26,18 @@ namespace Bibliotheques.MVC.Controllers
         {
             ViewBag.JoursLocation = _config.GetValue<int>("Bibliotheque:JoursEmprunt");
 
-            ViewData["DateRetourSortParam"] = String.IsNullOrEmpty(sortOrder) ? "dateRetour_desc" : "";
+            ViewData["DateRetourSortParam"] = string.IsNullOrEmpty(sortOrder) ? "dateRetour_desc" : "";
             ViewData["TitreLivreSortParam"] = sortOrder == "livreTitre" ? "livreTitre_desc" : "livreTitre";
             ViewData["DateEmpruntSortParam"] = sortOrder == "dateEmprunt" ? "dateEmprunt_desc" : "dateEmprunt";
             ViewData["NomAbonneSortParam"] = sortOrder == "nomAbonne" ? "nomAbonne_desc" : "nomAbonne";
             ViewData["CurrentFilter"] = searchString;
 
-            var emprunt = from s in _context.Emprunts
-                          select s;
+            var emprunts = await _bibliothequeProxy.ObtenirTousLesEmprunts();
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 var searchStringToUpper = searchString.ToUpper();
-                emprunt = emprunt.Where(s => s.Usager.Nom.ToUpper().Contains(searchStringToUpper)
+                emprunts = emprunts.Where(s => s.Usager.Nom.ToUpper().Contains(searchStringToUpper)
                                              || s.Usager.Prenom.ToUpper().Contains(searchStringToUpper)
                                              || s.Usager.NumAbonne.ToUpper().Contains(searchStringToUpper)
                                              || s.Livre.Titre.ToUpper().Contains(searchStringToUpper)
@@ -55,31 +48,31 @@ namespace Bibliotheques.MVC.Controllers
             switch (sortOrder)
             {
                 case "livreTitre_desc":
-                    emprunt = emprunt.OrderByDescending(s => s.Livre.Titre);
+                    emprunts = emprunts.OrderByDescending(s => s.Livre.Titre);
                     break;
                 case "livreTitre":
-                    emprunt = emprunt.OrderBy(s => s.Livre.Titre);
+                    emprunts = emprunts.OrderBy(s => s.Livre.Titre);
                     break;
                 case "dateRetour_desc":
-                    emprunt = emprunt.OrderByDescending(s => s.DateRetour);
+                    emprunts = emprunts.OrderByDescending(s => s.DateRetour);
                     break;
                 case "dateEmprunt_desc":
-                    emprunt = emprunt.OrderByDescending(s => s.DateEmprunt);
+                    emprunts = emprunts.OrderByDescending(s => s.DateEmprunt);
                     break;
                 case "dateEmprunt":
-                    emprunt = emprunt.OrderBy(s => s.DateEmprunt);
+                    emprunts = emprunts.OrderBy(s => s.DateEmprunt);
                     break;
                 case "nomAbonne_desc":
-                    emprunt = emprunt.OrderByDescending(s => s.Usager.Nom);
+                    emprunts = emprunts.OrderByDescending(s => s.Usager.Nom);
                     break;
                 case "nomAbonne":
-                    emprunt = emprunt.OrderBy(s => s.Usager.Nom);
+                    emprunts = emprunts.OrderBy(s => s.Usager.Nom);
                     break;
                 default:
-                    emprunt = emprunt.OrderBy(s => s.DateRetour);
+                    emprunts = emprunts.OrderBy(s => s.DateRetour);
                     break;
             }
-            return View(await emprunt.ToListAsync());
+            return View(emprunts);
         }
 
         // GET: Emprunts/Details/5
@@ -88,10 +81,7 @@ namespace Bibliotheques.MVC.Controllers
         {
             ViewBag.JoursLocation = _config.GetValue<int>("Bibliotheque:JoursEmprunt");
 
-            var emprunt = await _context.Emprunts
-                .Include(e => e.Livre)
-                .Include(e => e.Usager)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
             if (emprunt == null)
             {
                 return NotFound();
@@ -102,10 +92,10 @@ namespace Bibliotheques.MVC.Controllers
 
         // GET: Emprunts/Create
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["LivreId"] = new SelectList(_context.Livres, "Id", "Categorie");
-            ViewData["UsagerId"] = new SelectList(_context.Usagers, "Id", "Email");
+            ViewData["LivreId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesLivres(), "Id", "Categorie");
+            ViewData["UsagerId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesUsagers(), "Id", "Email");
             return View();
         }
 
@@ -120,9 +110,8 @@ namespace Bibliotheques.MVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Add(emprunt);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                     await _bibliothequeProxy.AjouterEmprunt(emprunt);
+                     return RedirectToAction(nameof(Index));
                 }
             }
             catch (DbUpdateException)
@@ -131,8 +120,8 @@ namespace Bibliotheques.MVC.Controllers
                     "contacter l'administrateur de votre système.");
             }
 
-            ViewData["LivreId"] = new SelectList(_context.Livres, "Id", "Categorie", emprunt.LivreId);
-            ViewData["UsagerId"] = new SelectList(_context.Usagers, "Id", "Email", emprunt.UsagerId);
+            ViewData["LivreId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesLivres(), "Id", "Categorie", emprunt.LivreId);
+            ViewData["UsagerId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesUsagers(), "Id", "Email", emprunt.UsagerId);
             return View(emprunt);
         }
 
@@ -141,7 +130,7 @@ namespace Bibliotheques.MVC.Controllers
         {
             ViewBag.JoursLocation = _config.GetValue<int>("Bibliotheque:JoursEmprunt");
 
-            var emprunt = await _context.Emprunts.FindAsync(id);
+            var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
 
             //var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
             if (emprunt == null)
@@ -149,8 +138,8 @@ namespace Bibliotheques.MVC.Controllers
                 return NotFound();
             }
 
-            ViewData["LivreId"] = new SelectList(_context.Livres, "Id", "Categorie", emprunt.LivreId);
-            ViewData["UsagerId"] = new SelectList(_context.Usagers, "Id", "Email", emprunt.UsagerId);
+            ViewData["LivreId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesLivres(), "Id", "Categorie", emprunt.LivreId);
+            ViewData["UsagerId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesUsagers(), "Id", "Email", emprunt.UsagerId);
 
             return View(emprunt);
         }
@@ -171,8 +160,7 @@ namespace Bibliotheques.MVC.Controllers
             {
                 try
                 {
-                    _context.Entry(emprunt).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
+                    await _bibliothequeProxy.ModifierEmprunt(emprunt);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -187,8 +175,8 @@ namespace Bibliotheques.MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LivreId"] = new SelectList(_context.Livres, "Id", "Titre", emprunt.LivreId);
-            ViewData["UsagerId"] = new SelectList(_context.Usagers, "Id", "Nom", emprunt.UsagerId);
+            ViewData["LivreId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesLivres(), "Id", "Titre", emprunt.LivreId);
+            ViewData["UsagerId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesUsagers(), "Id", "Nom", emprunt.UsagerId);
             return View(emprunt);
         }
 
@@ -197,10 +185,7 @@ namespace Bibliotheques.MVC.Controllers
         {
             ViewBag.JoursLocation = _config.GetValue<int>("Bibliotheque:JoursEmprunt");
 
-            var emprunt = await _context.Emprunts
-                .Include(e => e.Livre)
-                .Include(e => e.Usager)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
             if (emprunt == null)
             {
                 return NotFound();
@@ -221,7 +206,7 @@ namespace Bibliotheques.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var emprunt = await _context.Emprunts.FindAsync(id);
+            var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
 
             if (emprunt == null)
             {
@@ -229,8 +214,7 @@ namespace Bibliotheques.MVC.Controllers
             }
             try
             {
-                _context.Emprunts.Remove(emprunt);
-                await _context.SaveChangesAsync();
+                await _bibliothequeProxy.EffacerEmprunt(id);
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException)
@@ -242,7 +226,7 @@ namespace Bibliotheques.MVC.Controllers
 
         private bool EmpruntExists(int id)
         {
-            return _context.Emprunts.Any(e => e.Id == id);
+            return _bibliothequeProxy.ObtenirEmpruntParId(id) != null;
         }
     }
 }
