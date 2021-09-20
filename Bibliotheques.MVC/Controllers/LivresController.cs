@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Bibliotheques.ApplicationCore.Entites;
-using Bibliotheques.Infrastructure.Data;
+using Bibliotheques.MVC.Data;
+using Bibliotheques.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;

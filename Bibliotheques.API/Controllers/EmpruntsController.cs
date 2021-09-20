@@ -27,7 +27,7 @@ namespace Bibliotheques.API.Controllers
         }
 
         // GET api/<EmpruntController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<Emprunt> Get(int id)
         {
             return await _crudService.ObtenirEmpruntParId(id);
@@ -42,7 +42,7 @@ namespace Bibliotheques.API.Controllers
         }
 
         // PUT api/<EmpruntController>/5
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<ActionResult<Emprunt>> Put(int id, [FromBody] Emprunt emprunt)
         {
             await _crudService.ModifierEmprunt(emprunt);
@@ -50,7 +50,7 @@ namespace Bibliotheques.API.Controllers
         }
 
         // DELETE api/<EmpruntController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult<Emprunt>> Delete(int id)
         {
             await _crudService.EffacerEmprunt(id);

@@ -1,4 +1,4 @@
-using Bibliotheques.Infrastructure.Data;
+
 using Bibliotheques.MVC.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,8 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using Bibliotheques.MVC.Proxies;
-using Bibliotheques.ApplicationCore.Interfaces;
-using Bibliotheques.ApplicationCore.Services;
+using Bibliotheques.MVC.Data;
 
 namespace Bibliotheques.MVC
 {

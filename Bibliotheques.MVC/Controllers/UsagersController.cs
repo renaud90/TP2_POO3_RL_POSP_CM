@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
-using Bibliotheques.ApplicationCore.Entites;
-using Bibliotheques.Infrastructure.Data;
+using Bibliotheques.MVC.Data;
+using Bibliotheques.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Bibliotheques.MVC.Services;

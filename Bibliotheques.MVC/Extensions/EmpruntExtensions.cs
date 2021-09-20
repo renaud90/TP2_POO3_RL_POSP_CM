@@ -1,5 +1,5 @@
 using System;
-using Bibliotheques.ApplicationCore.Entites;
+using Bibliotheques.MVC.Models;
 
 namespace Bibliotheques.MVC.Extensions
 {
