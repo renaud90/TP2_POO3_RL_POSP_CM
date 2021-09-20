@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Bibliotheques.ApplicationCore.Entites;
-using Bibliotheques.ApplicationCore.Interfaces;
+using Bibliotheques.MVC.Models;
+using Bibliotheques.MVC.Proxies;
 using Microsoft.Extensions.Configuration;
 
 namespace Bibliotheques.MVC.Controllers

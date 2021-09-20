@@ -1,13 +1,10 @@
-﻿using Bibliotheques.ApplicationCore.Entites;
-using Bibliotheques.ApplicationCore.Interfaces;
-using Newtonsoft.Json;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Bibliotheques.MVC.Models;
 
 namespace Bibliotheques.MVC.Proxies
 {
@@ -23,11 +20,13 @@ namespace Bibliotheques.MVC.Proxies
             _httpClient = httpClient;
         }
 
-        public async Task<Emprunt> ObtenirEmpruntParId(int id) {
+        public async Task<Emprunt> ObtenirEmpruntParId(int id) 
+        {
             return await _httpClient.GetFromJsonAsync<Emprunt>(_empruntsApiUrl + id);
         }
         
-        public async Task<IEnumerable<Emprunt>> ObtenirTousLesEmprunts() {
+        public async Task<IEnumerable<Emprunt>> ObtenirTousLesEmprunts() 
+        {
             return await _httpClient.GetFromJsonAsync<IEnumerable<Emprunt>>(_empruntsApiUrl);
         }
         
