@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Bibliotheques.MVC.Models;
 using Bibliotheques.MVC.Proxies;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace Bibliotheques.MVC.Controllers
 {
@@ -92,10 +93,14 @@ namespace Bibliotheques.MVC.Controllers
 
         // GET: Emprunts/Create
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(string? erreurLivre, string? erreurUsager, int? userId, int? livreId)
         {
-            ViewData["LivreId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesLivres(), "Id", "Categorie");
-            ViewData["UsagerId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesUsagers(), "Id", "Email");
+            ViewBag.Livres = (await _bibliothequeProxy.ObtenirTousLesLivres()).ToList().OrderBy(_ => _.CodeLivre);
+            ViewBag.Usagers = (await _bibliothequeProxy.ObtenirTousLesUsagers()).ToList().OrderBy(_ => _.NumAbonne);
+            ViewBag.ErreurLivre = erreurLivre;
+            ViewBag.ErreurUsager = erreurUsager;
+            ViewBag.livreId = livreId;
+            ViewBag.userId = userId;
             return View();
         }
 
@@ -104,15 +109,26 @@ namespace Bibliotheques.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LivreId,UsagerId,DateEmprunt,DateRetour,Id")] Emprunt emprunt)
+        public async Task<IActionResult> Create(int LivreId, int UsagerId)
         {
+            var usager = (await _bibliothequeProxy.ObtenirTousLesUsagers()).FirstOrDefault(_ => _.Id == UsagerId);
+            var livre = (await _bibliothequeProxy.ObtenirTousLesLivres()).FirstOrDefault(_ => _.Id == LivreId);
+            if(usager.Emprunts != null)
+            {
+                foreach (var e in usager.Emprunts)
+                {
+                    if (e.LivreId == LivreId || e.DateRetour == DateTime.MinValue)
+                    {
+                        return RedirectToAction(nameof(Create), new {erreurLivre= "Ce livre est déjà prêté à cet usager.", erreurUsager="Cet usager a déjà ce livre en sa possession.", userId=UsagerId, livreId=LivreId });
+                    }
+                }
+            }
+            
+            var emprunt = new Emprunt() { LivreId = LivreId, UsagerId = UsagerId, DateEmprunt = DateTime.Now, DateRetour = DateTime.MinValue };
             try
             {
-                if (ModelState.IsValid)
-                {
-                     await _bibliothequeProxy.AjouterEmprunt(emprunt);
-                     return RedirectToAction(nameof(Index));
-                }
+                await _bibliothequeProxy.AjouterEmprunt(emprunt);
+                return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException)
             {

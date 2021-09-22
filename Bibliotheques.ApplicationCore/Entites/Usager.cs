@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Bibliotheques.ApplicationCore.Entites
@@ -42,10 +44,12 @@ namespace Bibliotheques.ApplicationCore.Entites
         [Display(Name = "Nombre de défaillance(s)")]
         public int Defaillance { get; set; } = 0;
         
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual ICollection<Emprunt> Emprunts { get; set; }
         
-        public bool PeutEmprunter => Defaillance < 3;
+        public bool PeutEmprunter => Defaillance < 3 && (Emprunts == null || Emprunts.Where(_ => _.DateRetour == DateTime.MinValue).Count() < 3);
+
+
         
     }
 

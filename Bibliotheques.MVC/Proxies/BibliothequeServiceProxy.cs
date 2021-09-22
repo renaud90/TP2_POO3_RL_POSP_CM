@@ -34,7 +34,7 @@ namespace Bibliotheques.MVC.Proxies
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(emprunt), Encoding.UTF8, "application/json");
 
-            await _httpClient.PostAsync(_empruntsApiUrl, content);
+            await _httpClient.PostAsync(_empruntsApiUrl, content);            
         }
         public async Task ModifierEmprunt(Emprunt emprunt) {
             StringContent content = new StringContent(JsonConvert.SerializeObject(emprunt), Encoding.UTF8, "application/json");

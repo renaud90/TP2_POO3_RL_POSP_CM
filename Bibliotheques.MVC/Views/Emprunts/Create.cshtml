@@ -1,10 +1,10 @@
 ﻿@model Bibliotheques.MVC.Models.Emprunt
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Effectuer un emprunt";
 }
 
-<h1>Créer</h1>
+<h1>Effectuer un emprunt</h1>
 
 <h4>Un nouvel emprunt</h4>
 <hr />
@@ -12,43 +12,45 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <h5>Informations de l'emprunteur</h5>
+            <h5>Sélectionnez l'emprunteur</h5>
             <div class="form-group">
-                <label asp-for="Usager.Prenom" class="control-label"></label>
-                <input asp-for="Usager.Prenom" class="form-control" />
-                <span asp-validation-for="Usager.Prenom" class="text-danger"></span>
+                <select name="usagerId" class="form-control" required>
+                    
+                    @foreach (var u in ViewBag.Usagers)
+                    {
+                        bool selectionne = ViewBag.userId == u.Id; 
+                        string couleurTexte = u.PeutEmprunter == false ? "disabled" : "successMessage";
+                        var nonPermis = !u.PeutEmprunter;
+                        <option class=@couleurTexte value=@u.Id disabled=@nonPermis selected=@selectionne> @u.NumAbonne</option>
+                    }
+                </select>
+                <p>Si un usager ne peut pas être sélectionné, il a soit trois défaillances ou plus à son dossier ou a trois livres ou plus d'empruntés qui n'ont pas encore été retournés. 
+                Consultez le dossier de l'usager pour plus d'informations.</p>
             </div>
-            <div class="form-group">
-                <label asp-for="Usager.Nom" class="control-label"></label>
-                <input asp-for="Usager.Nom" class="form-control" />
-                <span asp-validation-for="Usager.Nom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Usager.NumAbonne" class="control-label"></label>
-                <input asp-for="Usager.NumAbonne" class="form-control" />
-                <span asp-validation-for="Usager.NumAbonne" class="text-danger"></span>
-            </div>
-            <hr />
-            <h5>Informations du livre emprunté</h5>
-            <div class="form-group">
-                <label asp-for="Livre.Titre" class="control-label"></label>
-                <input asp-for="Livre.Titre" class="form-control" />
-                <span asp-validation-for="Livre.Titre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Livre.Isbn13" class="control-label"></label>
-                <input asp-for="Livre.Isbn13" class="form-control" />
-                <span asp-validation-for="Livre.Isbn13" class="text-danger"></span>
-            </div>
-            <hr />
-            <h5>Date de l'emprunt</h5>
-            <div class="form-group">
-                <input asp-for="DateEmprunt" class="form-control" />
-                <span asp-validation-for="DateEmprunt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            @if (ViewBag.ErreurUsager != null)
+            {
+                <p class="errorMessage">@ViewBag.ErreurUsager   </p>
+            }
 
+            <hr />
+            <h5>Sélectionnez le livre</h5>
+            <div class="form-group">
+                <select name="livreId" class="form-control" required>
+                    @foreach (var l in ViewBag.Livres)
+                    {
+                        bool selectionne = ViewBag.livreId == l.Id;
+                        bool restePlus = l.Quantite< 1;
+                        string couleurTexte = restePlus == true ? "disabled" : "successMessage";
+                        <option class=@couleurTexte value=@l.Id disabled=@restePlus selected=@selectionne> @l.CodeLivre</option>
+                    }
+                </select>
+                <p>Si un livre ne peut pas être sélectionné, c'est qu'aucune copie n'est disponible présentement. Consultez la page du livre pour connaître les dates attendues de retour.</p>
             </div>
+            @if (ViewBag.ErreurLivre != null)
+            {
+                <p class="errorMessage"> @ViewBag.ErreurLivre   </p>
+            }
+            <hr />
             <div class="form-group">
                 <input type="submit" value="Créer" class="btn btn-primary" />
             </div>

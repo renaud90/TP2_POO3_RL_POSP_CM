@@ -43,8 +43,10 @@ namespace Bibliotheques.ApplicationCore.Services
             var empruntExiste = await EmpruntExiste(emprunt);
             if (emprunt == null || empruntExiste)
                 return;
-
+            var livre = await _livresRepository.ObtenirParIdAsync(emprunt.LivreId);
+            livre.Quantite -= 1;
             await _empruntsRepository.AjouterAsync(emprunt);
+            await _livresRepository.ModifierAsync(livre);
         }
 
         public async Task ModifierEmprunt(Emprunt emprunt)
