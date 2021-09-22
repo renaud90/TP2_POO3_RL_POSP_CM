@@ -7,6 +7,8 @@ using Bibliotheques.MVC.Models;
 using Bibliotheques.MVC.Proxies;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
 
 namespace Bibliotheques.MVC.Controllers
 {
@@ -173,7 +175,7 @@ namespace Bibliotheques.MVC.Controllers
             {
                 await _bibliothequeProxy.ModifierEmprunt(emprunt);
             }
-            catch (Exception)
+            catch (HttpRequestException)
             {
                 throw;
             }

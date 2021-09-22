@@ -57,6 +57,7 @@ namespace Bibliotheques.MVC.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var livre = await _context.Livres
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (livre == null)
@@ -82,7 +83,7 @@ namespace Bibliotheques.MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Isbn10,Isbn13,Titre,Categorie,Quantite,Prix")] Livre livre, string[] auteurs)
         {
-            if (_context.Livres.FirstOrDefault(_ => _.Categorie == livre.Categorie) == null)
+            if (_context.Livres.AsNoTracking().FirstOrDefault(_ => _.Categorie == livre.Categorie) == null)
             {
                 if (livre.Categorie.Contains("-"))
                 {
@@ -184,7 +185,7 @@ namespace Bibliotheques.MVC.Controllers
                 livre.Categorie);
             ViewBag.Auteurs = new MultiSelectList(_config.GetSection("Bibliotheque:Auteurs").Get<List<string>>(), auteurs);
 
-            if (_context.Livres.FirstOrDefault(_ => _.Categorie == livre.Categorie) == null)
+            if (_context.Livres.AsNoTracking().FirstOrDefault(_ => _.Categorie == livre.Categorie) == null)
             {
                 if (livre.Categorie.Contains("-"))
                 {
@@ -245,7 +246,7 @@ namespace Bibliotheques.MVC.Controllers
             {
                 try
                 {
-                    _context.Update(livre);
+                    _context.Entry(livre).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

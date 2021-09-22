@@ -88,11 +88,13 @@
                 <dd class="col-sm-9">
                     @Html.Raw(Model.DateEmprunt.AddDays(ViewBag.NbJoursLimite));
                 </dd>
+                </dl>
                 <div class="form-group">
                     <input type="hidden" asp-for="Id" />
                     <input type="hidden" name="dateRetour" value=@DateTime.Now />
                     <input type="submit" value="Retourner le livre" class="btn btn-primary" hidden=@ViewBag.EstRetourne />
                 </div>
+               
 </form>
     </div>
 </div>

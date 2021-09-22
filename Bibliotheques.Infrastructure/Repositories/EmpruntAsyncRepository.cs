@@ -38,7 +38,7 @@ namespace Bibliotheques.Infrastructure.Repositories
 
         public async Task AjouterAsync(Emprunt entite) 
         {
-            await _context.Set<Emprunt>().AddAsync(entite);
+            _context.Set<Emprunt>().Add(entite);
             await _context.SaveChangesAsync();
         }
 
@@ -51,7 +51,7 @@ namespace Bibliotheques.Infrastructure.Repositories
 
         public async Task ModifierAsync(Emprunt entite)
         {
-            _context.Set<Emprunt>().Update(entite);
+            _context.Update(entite);
             await _context.SaveChangesAsync();
         }
     }

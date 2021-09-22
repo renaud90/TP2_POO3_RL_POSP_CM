@@ -39,24 +39,25 @@ namespace Bibliotheques.ApplicationCore.Services
         public async Task AjouterEmprunt(Emprunt emprunt)
         {
             emprunt.Livre.Quantite--;
-
-            await _empruntsRepository.AjouterAsync(emprunt);
+            
             await _livresRepository.ModifierAsync(emprunt.Livre);
+            await _empruntsRepository.AjouterAsync(emprunt);
         }
 
         public async Task ModifierEmprunt(Emprunt emprunt)//, bool estEnRetard)
         {
             emprunt.Livre.Quantite++;
             
-            //if (estEnRetard)
-            //    emprunt.Usager.Defaillance++;
-            
+            await _livresRepository.ModifierAsync(emprunt.Livre);
             await _empruntsRepository.ModifierAsync(emprunt);
         }
 
         public async Task EffacerEmprunt(int id)
         {
             var emprunt = await _empruntsRepository.ObtenirParIdAsync(id);
+            
+            emprunt.Livre.Quantite++;
+            await _livresRepository.ModifierAsync(emprunt.Livre);
             await _empruntsRepository.SupprimerAsync(emprunt);
         }
 

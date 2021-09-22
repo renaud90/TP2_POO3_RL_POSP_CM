@@ -38,7 +38,7 @@ namespace Bibliotheques.Infrastructure.Repositories
 
         public async Task AjouterAsync(T entite)
         {
-            await _context.Set<T>().AddAsync(entite);
+            _context.Set<T>().Add(entite);
             await _context.SaveChangesAsync();
         }
 

@@ -43,7 +43,6 @@ namespace Bibliotheques.ApplicationCore.Entites
         [MinLength(1, ErrorMessage = "Le livre doit posséder au moins un auteur.")]
         public string Auteurs { get; set; }
         
-        [JsonIgnore]
         public virtual ICollection<Emprunt> Emprunts { get; set; }
     }
 }
