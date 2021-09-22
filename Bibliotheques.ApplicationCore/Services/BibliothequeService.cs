@@ -41,7 +41,7 @@ namespace Bibliotheques.ApplicationCore.Services
             emprunt.Livre.Quantite--;
 
             await _empruntsRepository.AjouterAsync(emprunt);
-            await _livresRepository.ModifierAsync(livre);
+            await _livresRepository.ModifierAsync(emprunt.Livre);
         }
 
         public async Task ModifierEmprunt(Emprunt emprunt, bool estEnRetard)
