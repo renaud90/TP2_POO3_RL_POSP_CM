@@ -39,7 +39,7 @@ namespace Bibliotheques.MVC.Proxies
         public async Task ModifierEmprunt(Emprunt emprunt) {
             StringContent content = new StringContent(JsonConvert.SerializeObject(emprunt), Encoding.UTF8, "application/json");
 
-            await _httpClient.PutAsync(_empruntsApiUrl, content);
+            await _httpClient.PutAsync(_empruntsApiUrl + emprunt.Id, content);
         }
         public async Task EffacerEmprunt(int id) {
             await _httpClient.DeleteAsync(_empruntsApiUrl + id);

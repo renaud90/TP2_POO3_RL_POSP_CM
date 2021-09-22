@@ -44,7 +44,7 @@ namespace Bibliotheques.ApplicationCore.Entites
         [Display(Name = "Nombre de défaillance(s)")]
         public int Defaillance { get; set; } = 0;
         
-        //[JsonIgnore]
+        [JsonIgnore]
         public virtual ICollection<Emprunt> Emprunts { get; set; }
         
         public bool PeutEmprunter => Defaillance < 3 && (Emprunts == null || Emprunts.Where(_ => _.DateRetour == DateTime.MinValue).Count() < 3);

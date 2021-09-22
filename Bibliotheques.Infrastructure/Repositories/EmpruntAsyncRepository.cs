@@ -20,24 +20,18 @@ namespace Bibliotheques.Infrastructure.Repositories
         
         public async Task<Emprunt> ObtenirParIdAsync(int id) {
             return await _context.Set<Emprunt>()
-                .Include(_ => _.Livre)
-                .Include(_ => _.Usager)
                 .FirstOrDefaultAsync(_ => _.Id == id);            
         }
 
         public async Task<IEnumerable<Emprunt>> ObtenirToutAsync()
         {
             return await _context.Set<Emprunt>()
-                .Include(_ => _.Livre)
-                .Include(_ => _.Usager)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Emprunt>> ObtenirListeAsync(Expression<Func<Emprunt, bool>> predicate)
         {
             return await _context.Set<Emprunt>()
-                .Include(_ => _.Livre)
-                .Include(_ => _.Usager)
                 .Where(predicate)
                 .ToListAsync();
         }

@@ -117,45 +117,40 @@ namespace Bibliotheques.MVC.Controllers
             {
                 foreach (var e in usager.Emprunts)
                 {
-                    if (e.LivreId == LivreId || e.DateRetour == DateTime.MinValue)
+                    if (e.LivreId == LivreId && e.DateRetour == DateTime.MinValue)
                     {
                         return RedirectToAction(nameof(Create), new {erreurLivre= "Ce livre est déjà prêté à cet usager.", erreurUsager="Cet usager a déjà ce livre en sa possession.", userId=UsagerId, livreId=LivreId });
                     }
                 }
             }
             
-            var emprunt = new Emprunt() { LivreId = LivreId, UsagerId = UsagerId, DateEmprunt = DateTime.Now, DateRetour = DateTime.MinValue };
+            var emprunt = new Emprunt() { LivreId = LivreId, UsagerId = UsagerId, DateEmprunt = DateTime.Now, DateRetour = DateTime.MinValue, Livre=livre, Usager=usager };
             try
             {
                 await _bibliothequeProxy.AjouterEmprunt(emprunt);
                 return RedirectToAction(nameof(Index));
             }
-            catch (DbUpdateException)
+            catch (Exception)
             {
-                ModelState.AddModelError("", "Échoue de la savegarde des données. Veuillez réessayer, si le probleme persiste " +
-                    "contacter l'administrateur de votre système.");
+                throw;
             }
-
-            ViewData["LivreId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesLivres(), "Id", "Categorie", emprunt.LivreId);
-            ViewData["UsagerId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesUsagers(), "Id", "Email", emprunt.UsagerId);
             return View(emprunt);
         }
 
         // GET: Emprunts/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             ViewBag.JoursLocation = _config.GetValue<int>("Bibliotheque:JoursEmprunt");
-
+            
             var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
-
+            ViewBag.EstRetourne = emprunt.DateRetour != DateTime.MinValue;
             //var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
             if (emprunt == null)
             {
                 return NotFound();
             }
 
-            ViewData["LivreId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesLivres(), "Id", "Categorie", emprunt.LivreId);
-            ViewData["UsagerId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesUsagers(), "Id", "Email", emprunt.UsagerId);
             ViewBag.NbJoursLimite = Int32.Parse(_config.GetSection("Bibliotheque").GetSection("JoursEmprunt").Value);
             return View(emprunt);
         }
@@ -165,35 +160,24 @@ namespace Bibliotheques.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LivreId,UsagerId,DateEmprunt,DateRetour,Id")] Emprunt emprunt)
+        public async Task<IActionResult> Edit(int id, DateTime dateRetour)
         {
+            var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
+            emprunt.DateRetour = dateRetour;
             if (id != emprunt.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    await _bibliothequeProxy.ModifierEmprunt(emprunt);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmpruntExists(emprunt.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _bibliothequeProxy.ModifierEmprunt(emprunt);
             }
-            ViewData["LivreId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesLivres(), "Id", "Titre", emprunt.LivreId);
-            ViewData["UsagerId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesUsagers(), "Id", "Nom", emprunt.UsagerId);
-            return View(emprunt);
+            catch (Exception)
+            {
+                throw;
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Emprunts/Delete/5

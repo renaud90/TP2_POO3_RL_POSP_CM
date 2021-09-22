@@ -58,7 +58,7 @@ namespace Bibliotheques.API.Controllers
 
         // PUT api/<EmpruntController>/5
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Emprunt>> Put(int id, [FromBody] Emprunt emprunt, bool retard = false)
+        public async Task<ActionResult<Emprunt>> Put(int id, [FromBody] Emprunt emprunt)//, bool retard = false)
         {
             if (emprunt == null || emprunt.Id != id)
                 return BadRequest("Requête invalide : L'emprunt n'est pas le même que celui de l'identifiant/est nul.");
@@ -68,8 +68,8 @@ namespace Bibliotheques.API.Controllers
             
             if (!ModelState.IsValid || emprunt.DateRetour == DateTime.MinValue) 
                 return BadRequest("Requête invalide : L'emprunt n'est pas conforme.");
-            
-            await _crudService.ModifierEmprunt(emprunt, retard);
+
+            await _crudService.ModifierEmprunt(emprunt);//, retard);
             
             return NoContent();
 

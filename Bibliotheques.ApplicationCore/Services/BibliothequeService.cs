@@ -44,12 +44,12 @@ namespace Bibliotheques.ApplicationCore.Services
             await _livresRepository.ModifierAsync(emprunt.Livre);
         }
 
-        public async Task ModifierEmprunt(Emprunt emprunt, bool estEnRetard)
+        public async Task ModifierEmprunt(Emprunt emprunt)//, bool estEnRetard)
         {
             emprunt.Livre.Quantite++;
             
-            if (estEnRetard)
-                emprunt.Usager.Defaillance++;
+            //if (estEnRetard)
+            //    emprunt.Usager.Defaillance++;
             
             await _empruntsRepository.ModifierAsync(emprunt);
         }

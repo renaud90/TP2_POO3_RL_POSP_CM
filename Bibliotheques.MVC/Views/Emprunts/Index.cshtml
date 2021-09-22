@@ -90,8 +90,9 @@
                     }
                 }
                 <td>
+                    @{ var estRetourne = item.DateRetour != DateTime.MinValue;} 
                     <a asp-action="Edit" asp-route-id="@item.Id">Voir/Retourner cet emprunt</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" hidden=@estRetourne>Supprimer</a>
                 </td>
             </tr>
         }

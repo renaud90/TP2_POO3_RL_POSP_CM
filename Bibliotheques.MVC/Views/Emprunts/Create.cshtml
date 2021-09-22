@@ -9,7 +9,7 @@
 <h4>Un nouvel emprunt</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <h5>Sélectionnez l'emprunteur</h5>
@@ -20,8 +20,9 @@
                     {
                         bool selectionne = ViewBag.userId == u.Id; 
                         string couleurTexte = u.PeutEmprunter == false ? "disabled" : "successMessage";
+                        string affichageNom = u.NumAbonne + "-" + u.Prenom + " " + u.Nom;
                         var nonPermis = !u.PeutEmprunter;
-                        <option class=@couleurTexte value=@u.Id disabled=@nonPermis selected=@selectionne> @u.NumAbonne</option>
+                        <option class=@couleurTexte value=@u.Id disabled=@nonPermis selected=@selectionne> @affichageNom</option>
                     }
                 </select>
                 <p>Si un usager ne peut pas être sélectionné, il a soit trois défaillances ou plus à son dossier ou a trois livres ou plus d'empruntés qui n'ont pas encore été retournés. 
@@ -40,8 +41,9 @@
                     {
                         bool selectionne = ViewBag.livreId == l.Id;
                         bool restePlus = l.Quantite< 1;
+                        string affichageLivre = l.CodeLivre + "-" + l.Titre; 
                         string couleurTexte = restePlus == true ? "disabled" : "successMessage";
-                        <option class=@couleurTexte value=@l.Id disabled=@restePlus selected=@selectionne> @l.CodeLivre</option>
+                        <option class=@couleurTexte value=@l.Id disabled=@restePlus selected=@selectionne> @affichageLivre</option>
                     }
                 </select>
                 <p>Si un livre ne peut pas être sélectionné, c'est qu'aucune copie n'est disponible présentement. Consultez la page du livre pour connaître les dates attendues de retour.</p>

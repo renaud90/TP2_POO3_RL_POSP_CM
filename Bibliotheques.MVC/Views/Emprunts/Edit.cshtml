@@ -89,7 +89,9 @@
                     @Html.Raw(Model.DateEmprunt.AddDays(ViewBag.NbJoursLimite));
                 </dd>
                 <div class="form-group">
-                    <input type="submit" value="Retourner le livre" class="btn btn-primary" />
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" name="dateRetour" value=@DateTime.Now />
+                    <input type="submit" value="Retourner le livre" class="btn btn-primary" hidden=@ViewBag.EstRetourne />
                 </div>
 </form>
     </div>
