@@ -156,7 +156,7 @@ namespace Bibliotheques.MVC.Controllers
 
             ViewData["LivreId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesLivres(), "Id", "Categorie", emprunt.LivreId);
             ViewData["UsagerId"] = new SelectList(await _bibliothequeProxy.ObtenirTousLesUsagers(), "Id", "Email", emprunt.UsagerId);
-
+            ViewBag.NbJoursLimite = Int32.Parse(_config.GetSection("Bibliotheque").GetSection("JoursEmprunt").Value);
             return View(emprunt);
         }
 

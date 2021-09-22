@@ -43,54 +43,55 @@
 </div>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <h5>Informations de l'emprunteur</h5>
-            <div class="form-group">
-                <label asp-for="Usager.Prenom" class="control-label"></label>
-                <input asp-for="Usager.Prenom" class="form-control" />
-                <span asp-validation-for="Usager.Prenom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Usager.Nom" class="control-label"></label>
-                <input asp-for="Usager.Nom" class="form-control" />
-                <span asp-validation-for="Usager.Nom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Usager.NumAbonne" class="control-label"></label>
-                <input asp-for="Usager.NumAbonne" class="form-control" />
-                <span asp-validation-for="Usager.NumAbonne" class="text-danger"></span>
-            </div>
-            <hr />
-            <h5>Informations du livre emprunté</h5>
-            <div class="form-group">
-                <label asp-for="Livre.Titre" class="control-label"></label>
-                <input asp-for="Livre.Titre" class="form-control" />
-                <span asp-validation-for="Livre.Titre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Livre.Isbn13" class="control-label"></label>
-                <input asp-for="Livre.Isbn13" class="form-control" />
-                <span asp-validation-for="Livre.Isbn13" class="text-danger"></span>
-            </div>
-            <hr />
-            <h5>Date de l'emprunt</h5>
-            <div class="form-group">
-                <label asp-for="DateEmprunt" class="control-label"></label>
-                <input asp-for="DateEmprunt" class="form-control" />
-                <span asp-validation-for="DateEmprunt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateRetour" class="control-label"></label>
-                <input asp-for="DateRetour" class="form-control" />
-                <span asp-validation-for="DateRetour" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <input type="submit" value="Sauvegarder" class="btn btn-primary" />
-            </div>
-        </form>
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Usager.Prenom)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Usager.Prenom)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Usager.Nom)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Usager.Nom)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Usager.NumAbonne)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Usager.NumAbonne)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Livre.Titre)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Livre.Titre)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Livre.Isbn13)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Livre.Isbn13)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.DateEmprunt)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.DateEmprunt)
+                </dd>
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.DateRetour)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.Raw(Model.DateEmprunt.AddDays(ViewBag.NbJoursLimite));
+                </dd>
+                <div class="form-group">
+                    <input type="submit" value="Retourner le livre" class="btn btn-primary" />
+                </div>
+</form>
     </div>
 </div>
 
