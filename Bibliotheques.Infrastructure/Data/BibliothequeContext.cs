@@ -16,12 +16,8 @@ namespace Bibliotheques.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Livre>().ToTable("Livre");
-
             modelBuilder.Entity<Usager>().ToTable("Usager");
-
-            modelBuilder.Entity<Emprunt>().ToTable("Emprunt")
-                .HasIndex(emprunt => new { emprunt.LivreId, emprunt.UsagerId });
-
+            modelBuilder.Entity<Emprunt>().ToTable("Emprunt");
         }
     }
 }

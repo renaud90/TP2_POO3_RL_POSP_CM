@@ -47,7 +47,7 @@ namespace Bibliotheques.MVC.Data
                 new Usager()
                 {
                     Prenom = "Eddie", Nom = "Brock", NumAbonne = "BRED0003",
-                    Email = "beddie@gmail.com", Statut = Statut.Enseignant
+                    Defaillance = 2, Email = "beddie@gmail.com", Statut = Statut.Etudiant
                 }
             };
 
@@ -96,8 +96,8 @@ namespace Bibliotheques.MVC.Data
                     UsagerId = contexte.Usagers
                         .Single(u => u.Prenom == "Eddie" && u.Nom == "Brock")
                         .Id,
-                    DateEmprunt = DateTime.Today.AddDays(-20),
-                    DateRetour = DateTime.Today.AddDays(-9)
+                    DateEmprunt = DateTime.Today.AddDays(-11),
+                    DateRetour = DateTime.MinValue
                 }
             };
 

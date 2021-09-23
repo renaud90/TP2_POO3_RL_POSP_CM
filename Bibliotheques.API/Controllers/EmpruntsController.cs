@@ -40,8 +40,8 @@ namespace Bibliotheques.API.Controllers
             if (emprunt == null)
                 return BadRequest("Erreur de création : il n'y a aucun emprunt à créer.");
             
-            if (EmpruntExiste(emprunt))
-                return BadRequest("Erreur de création : L'emprunt existe déja.");
+            if (await EmpruntSimilaireExiste(emprunt))
+                return BadRequest("Erreur de création : Un emprunt similaire existe déjà et n'a pas été retourné.");
             
             if (!emprunt.Usager.PeutEmprunter)
                 return BadRequest("Erreur de création : Cet usager a accumulé trop de défaillances.");
@@ -58,18 +58,20 @@ namespace Bibliotheques.API.Controllers
 
         // PUT api/<EmpruntController>/5
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Emprunt>> Put(int id, [FromBody] Emprunt emprunt)//, bool retard = false)
+        public async Task<ActionResult<Emprunt>> Put(int id, [FromBody] Emprunt emprunt, bool retard = false)
         {
             if (emprunt == null || emprunt.Id != id)
                 return BadRequest("Requête invalide : L'emprunt n'est pas le même que celui de l'identifiant/est nul.");
 
-            if (!EmpruntExiste(emprunt))
+            var empruntAModifier = await _crudService.ObtenirEmpruntParId(emprunt.Id);
+
+            if (empruntAModifier == null)
                 return NotFound();
             
             if (!ModelState.IsValid || emprunt.DateRetour == DateTime.MinValue) 
                 return BadRequest("Requête invalide : L'emprunt n'est pas conforme.");
-
-            await _crudService.ModifierEmprunt(emprunt);//, retard);
+            
+            await _crudService.ModifierEmprunt(emprunt, retard);
             
             return NoContent();
 
@@ -90,12 +92,15 @@ namespace Bibliotheques.API.Controllers
             await _crudService.EffacerEmprunt(id);
             return NoContent();
         }
-        
-        private bool EmpruntExiste(Emprunt emprunt)
-        {
-            var empruntDansRepo = _crudService.ObtenirEmpruntParId(emprunt.Id).Result;
 
-            return empruntDansRepo != null;
+        private async Task<bool> EmpruntSimilaireExiste(Emprunt emprunt)
+        {
+            var emprunts = await _crudService.ObtenirTousLesEmprunts();
+
+            return emprunts.Any(e =>
+                e.UsagerId == emprunt.UsagerId &&
+                e.LivreId == emprunt.LivreId &&
+                e.DateRetour == DateTime.MinValue);
         }
     }
 }

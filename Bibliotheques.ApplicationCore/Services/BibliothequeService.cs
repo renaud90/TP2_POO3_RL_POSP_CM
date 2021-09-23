@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Bibliotheques.ApplicationCore.Entites;
@@ -22,53 +23,93 @@ namespace Bibliotheques.ApplicationCore.Services
 
         public async Task<Emprunt> ObtenirEmpruntParId(int id)
         {
-            return await _empruntsRepository
-                .ObtenirParIdAsync(id);
+            var emprunt = await _empruntsRepository.ObtenirParIdAsync(id);
+            emprunt.Livre = await _livresRepository.ObtenirParIdAsync(emprunt.LivreId);
+            emprunt.Usager = await _usagersRepository.ObtenirParIdAsync(emprunt.UsagerId);
+
+            return emprunt;
         }
 
         public async Task<IEnumerable<Emprunt>> ObtenirTousLesEmprunts()
         {
-            return await _empruntsRepository.ObtenirToutAsync();
+            var emprunts = await _empruntsRepository.ObtenirToutAsync();
+            foreach (var emprunt in emprunts)
+            {
+                emprunt.Livre = await _livresRepository.ObtenirParIdAsync(emprunt.LivreId);
+                emprunt.Usager = await _usagersRepository.ObtenirParIdAsync(emprunt.UsagerId);
+            }
+
+            return emprunts;
         }
 
         public async Task<IEnumerable<Emprunt>> ObtenirListeEmprunts(Expression<Func<Emprunt, bool>> predicat)
         {
-            return await _empruntsRepository.ObtenirListeAsync(predicat);
+            var emprunts = await _empruntsRepository.ObtenirListeAsync(predicat);
+            
+            foreach (var emprunt in emprunts)
+            {
+                emprunt.Livre = await _livresRepository.ObtenirParIdAsync(emprunt.LivreId);
+                emprunt.Usager = await _usagersRepository.ObtenirParIdAsync(emprunt.UsagerId);
+            }
+
+            return emprunts;
         }
 
         public async Task AjouterEmprunt(Emprunt emprunt)
         {
-            emprunt.Livre.Quantite--;
+            emprunt.Livre = null;
+            emprunt.Usager = null;
             
-            await _livresRepository.ModifierAsync(emprunt.Livre);
             await _empruntsRepository.AjouterAsync(emprunt);
+            
+            var livre = await _livresRepository.ObtenirParIdAsync(emprunt.LivreId);
+            livre.Quantite--;
+            await _livresRepository.ModifierAsync(livre);
+         
         }
 
-        public async Task ModifierEmprunt(Emprunt emprunt)//, bool estEnRetard)
+        public async Task ModifierEmprunt(Emprunt emprunt, bool enRetard)//, bool estEnRetard)
         {
             emprunt.Livre.Quantite++;
             
-            await _livresRepository.ModifierAsync(emprunt.Livre);
+            if (enRetard)
+                emprunt.Usager.Defaillance++;
+            
             await _empruntsRepository.ModifierAsync(emprunt);
         }
 
         public async Task EffacerEmprunt(int id)
         {
             var emprunt = await _empruntsRepository.ObtenirParIdAsync(id);
-            
-            emprunt.Livre.Quantite++;
-            await _livresRepository.ModifierAsync(emprunt.Livre);
             await _empruntsRepository.SupprimerAsync(emprunt);
+
+            var livre = await _livresRepository.ObtenirParIdAsync(emprunt.LivreId);
+            livre.Quantite++;
+            await _livresRepository.ModifierAsync(emprunt.Livre);
         }
 
         public async Task<IEnumerable<Livre>> ObtenirTousLesLivres()
         {
-            return await _livresRepository.ObtenirToutAsync();
+            var livres = await _livresRepository.ObtenirToutAsync();
+
+            foreach (var livre in livres)
+            {
+                livre.Emprunts = (await _empruntsRepository.ObtenirListeAsync(e => e.LivreId == livre.Id)).ToList();
+            }
+
+            return livres;
         }
         
         public async Task<IEnumerable<Usager>> ObtenirTousLesUsagers()
         {
-            return await _usagersRepository.ObtenirToutAsync();
+            var usagers = await _usagersRepository.ObtenirToutAsync();
+
+            foreach (var usager in usagers)
+            {
+                usager.Emprunts = (await _empruntsRepository.ObtenirListeAsync(e => e.UsagerId == usager.Id)).ToList();
+            }
+
+            return usagers;
         }
 
     }

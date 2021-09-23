@@ -129,12 +129,14 @@ namespace Bibliotheques.MVC.Controllers
             var emprunt = new Emprunt() { LivreId = LivreId, UsagerId = UsagerId, DateEmprunt = DateTime.Now, DateRetour = DateTime.MinValue, Livre=livre, Usager=usager };
             try
             {
-                await _bibliothequeProxy.AjouterEmprunt(emprunt);
+                var reponse = await _bibliothequeProxy.AjouterEmprunt(emprunt);
+                reponse.EnsureSuccessStatusCode();
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception)
+            catch (HttpRequestException)
             {
-                throw;
+                ViewBag.Livres = (await _bibliothequeProxy.ObtenirTousLesLivres()).ToList().OrderBy(_ => _.CodeLivre);
+                ViewBag.Usagers = (await _bibliothequeProxy.ObtenirTousLesUsagers()).ToList().OrderBy(_ => _.NumAbonne);
             }
             return View(emprunt);
         }
@@ -147,7 +149,6 @@ namespace Bibliotheques.MVC.Controllers
             
             var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
             ViewBag.EstRetourne = emprunt.DateRetour != DateTime.MinValue;
-            //var emprunt = await _bibliothequeProxy.ObtenirEmpruntParId(id);
             if (emprunt == null)
             {
                 return NotFound();
@@ -173,13 +174,17 @@ namespace Bibliotheques.MVC.Controllers
 
             try
             {
-                await _bibliothequeProxy.ModifierEmprunt(emprunt);
+                var reponse = await _bibliothequeProxy.ModifierEmprunt(emprunt);
+                reponse.EnsureSuccessStatusCode();
+                return RedirectToAction(nameof(Index));
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException e)
             {
-                throw;
+                var erreur = e.StatusCode;
+                ViewBag.Erreur = erreur;
             }
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction(nameof(Edit), new { id = id });
         }
 
         // GET: Emprunts/Delete/5

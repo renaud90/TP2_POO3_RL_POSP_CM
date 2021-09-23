@@ -21,17 +21,22 @@ namespace Bibliotheques.Infrastructure.Repositories
 
         public async Task<T> ObtenirParIdAsync(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            return await _context.Set<T>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<IEnumerable<T>> ObtenirToutAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>()
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<T>> ObtenirListeAsync(Expression<Func<T, bool>> predicat)
         {
             return await _context.Set<T>()
+                .AsNoTracking()
                 .Where(predicat)
                 .ToListAsync();
         }
