@@ -18,6 +18,13 @@ namespace Bibliotheques.API.Controllers
             _crudService = crudService;
         }
 
+        /// <summary>
+        /// Premet l'obtention et le retour d'une liste de tous les livres de la Bibliothèque Lipajoli
+        /// </summary>
+        /// <remarks>Pas de remarques</remarks>  
+        /// <response code="200">Liste complète des livres de la bibliothèque Lipajoli trouvée et retournée</response>
+        /// <response code="404">Liste complète des livres de la bibliothèque Lipajoli introuvable</response>
+        /// <response code="500">Oups! Le service demandé est indisponible pour le moment</response>
         // GET: api/Livres
         [HttpGet]
         public async Task<IEnumerable<Livre>> Get()
@@ -25,6 +32,15 @@ namespace Bibliotheques.API.Controllers
             return await _crudService.ObtenirTousLesLivres();
         }
 
+        /// <summary>
+        /// Premet l'obtention et le retour des informations d'un livre spécifique, ciblé par l'id passé en paramètre
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <remarks>Pas de remarques</remarks>  
+        /// <response code="200">Le livre spécifié a été trouvé et retourné</response>
+        /// <response code="404">Livre introuvable pour l'id specifié</response>
+        /// <response code="500">Oups! Le service demandé est indisponible pour le moment</response>
         // GET: api/Livres/5
         [HttpGet("{id:int}", Name = "Get")]
         public async Task<Livre> Get(int id)

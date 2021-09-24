@@ -19,6 +19,13 @@ namespace Bibliotheques.API.Controllers
             _crudService = crudService;
         }
 
+        /// <summary>
+        /// Premet l'obtention et le retour d'une liste de tous les emprunts ayant été effectués à la Bibliothèque Lipajoli
+        /// </summary>
+        /// <remarks>Pas de remarques</remarks>  
+        /// <response code="200">Liste complète des emprunts effectués à la bibliothèque Lipajoli trouvée et retournée</response>
+        /// <response code="404">Liste complète des emprunts effectués à la bibliothèque Lipajoli introuvable</response>
+        /// <response code="500">Oups! Le service demandé est indisponible pour le moment</response>
         // GET: api/<EmpruntController>
         [HttpGet]
         public async Task<IEnumerable<Emprunt>> Get()
@@ -26,6 +33,15 @@ namespace Bibliotheques.API.Controllers
             return await _crudService.ObtenirTousLesEmprunts();
         }
 
+        /// <summary>
+        /// Premet l'obtention et le retour des informations d'un emprunt spécifique, ciblé par l'id passé en paramètre
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <remarks>Pas de remarques</remarks>  
+        /// <response code="200">L'emprunt spécifié a été trouvé et retourné</response>
+        /// <response code="404">Emprunt introuvable pour l'id specifié</response>
+        /// <response code="500">Oups! Le service demandé est indisponible pour le moment</response>
         // GET api/<EmpruntController>/5
         [HttpGet("{id:int}")]
         public async Task<Emprunt> Get(int id)
@@ -33,6 +49,15 @@ namespace Bibliotheques.API.Controllers
             return await _crudService.ObtenirEmpruntParId(id);
         }
 
+        /// <summary>
+        /// Création d'un nouvel emprunt respectant les normes de validation
+        /// </summary>
+        /// <param name="emprunt"></param>
+        /// <returns></returns>
+        /// <remarks>Pas de remarques</remarks>  
+        /// <response code="200">Nouvel emprunt créé et ajouté</response>
+        /// <response code="404">Impossible de procéder à la création d'un nouvel emprunt avec l'id specifié</response>
+        /// <response code="500">Oops! le service est indisponible pour le moment</response>
         // POST api/<EmpruntController>
         [HttpPost]
         public async Task<ActionResult<Emprunt>> Post([FromBody] Emprunt emprunt)
@@ -56,6 +81,17 @@ namespace Bibliotheques.API.Controllers
             return CreatedAtAction(nameof(Post), new { id = emprunt.Id }, emprunt);
         }
 
+        /// <summary>
+        /// Permet la modification des informations d'un emprunt existant
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="emprunt"></param>
+        /// <param name="retard"></param>
+        /// <returns></returns>
+        /// <remarks>Pas de remarques</remarks>  
+        /// <response code="200">Emprunt cible trouvé et mofifié</response>
+        /// <response code="404">Emprunt introuvable pour l'id specifié</response>
+        /// <response code="500">Oops! le service est indisponible pour le moment</response>
         // PUT api/<EmpruntController>/5
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Emprunt>> Put(int id, [FromBody] Emprunt emprunt, bool retard = false)
@@ -77,6 +113,15 @@ namespace Bibliotheques.API.Controllers
 
         }
 
+        /// <summary>
+        /// Permet la suppression d'un emprunt existant, si le livre concerné n'a pas déjà été rendu à la bibliothèque
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <remarks>Pas de remarques</remarks>  
+        /// <response code="200">Emprunt cible trouvé et supprimé</response>
+        /// <response code="404">Emprunt introuvable pour l'id specifié</response>
+        /// <response code="500">Oops! le service est indisponible pour le moment</response>
         // DELETE api/<EmpruntController>/5
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<Emprunt>> Delete(int id)
@@ -93,6 +138,11 @@ namespace Bibliotheques.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Compare un emprunt aux emprunts préexistants dans la base de données et retourne une valeur booléenne 
+        /// </summary>
+        /// <param name="emprunt"></param>
+        /// <returns></returns>
         private async Task<bool> EmpruntSimilaireExiste(Emprunt emprunt)
         {
             var emprunts = await _crudService.ObtenirTousLesEmprunts();
