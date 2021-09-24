@@ -62,7 +62,7 @@ namespace Bibliotheques.API
                     },
                     Contact = new OpenApiContact
                     {
-                        Name = "Pierre-Renaud Rousseau",
+                        Name = "Pier-Renaud Rousseau",
                         Email = "prr@lipajoli.com",
                         Url = new Uri("https://bibliolipajoli.com/")
                     }
