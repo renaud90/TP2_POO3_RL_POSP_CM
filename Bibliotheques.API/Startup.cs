@@ -54,7 +54,7 @@ namespace Bibliotheques.API
                     
                     Title = "API de gestion des emprunts de la bibliothèque Lipajoli", 
                     Version = "v1",
-                    Description = "Système permettant de créer, modifier, supprimer et consultater des emprunts de livres",
+                    Description = "Système permettant de créer, modifier, supprimer et consulter des emprunts de livres",
                     License = new OpenApiLicense
                     {
                         Name = "Apache 2.0",
