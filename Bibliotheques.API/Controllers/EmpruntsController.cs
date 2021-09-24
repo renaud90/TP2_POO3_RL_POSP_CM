@@ -36,7 +36,7 @@ namespace Bibliotheques.API.Controllers
         /// <summary>
         /// Premet l'obtention et le retour des informations d'un emprunt spécifique, ciblé par l'id passé en paramètre
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">id de l'emprunt à retourner</param>
         /// <returns></returns>
         /// <remarks>Pas de remarques</remarks>  
         /// <response code="200">L'emprunt spécifié a été trouvé et retourné</response>
@@ -52,7 +52,7 @@ namespace Bibliotheques.API.Controllers
         /// <summary>
         /// Création d'un nouvel emprunt respectant les normes de validation
         /// </summary>
-        /// <param name="emprunt"></param>
+        /// <param name="emprunt">Nouvel emprunt auquel les valeurs de champs selectionnées par l'utilisateur seront assignées</param>
         /// <returns></returns>
         /// <remarks>Pas de remarques</remarks>  
         /// <response code="200">Nouvel emprunt créé et ajouté</response>
@@ -84,9 +84,10 @@ namespace Bibliotheques.API.Controllers
         /// <summary>
         /// Permet la modification des informations d'un emprunt existant
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="emprunt"></param>
-        /// <param name="retard"></param>
+        /// <param name="id">id de l'emprunt à modifier</param>
+        /// <param name="emprunt">emprunt à modifier</param>
+        /// <param name="retard">valeur booléenne signifiant que la date 
+        /// limite de retour du livre emprunté ne doit pas être dépassée</param>
         /// <returns></returns>
         /// <remarks>Pas de remarques</remarks>  
         /// <response code="200">Emprunt cible trouvé et mofifié</response>
@@ -116,7 +117,7 @@ namespace Bibliotheques.API.Controllers
         /// <summary>
         /// Permet la suppression d'un emprunt existant, si le livre concerné n'a pas déjà été rendu à la bibliothèque
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">id de l'emprunt à supprimer</param>
         /// <returns></returns>
         /// <remarks>Pas de remarques</remarks>  
         /// <response code="200">Emprunt cible trouvé et supprimé</response>
@@ -141,7 +142,7 @@ namespace Bibliotheques.API.Controllers
         /// <summary>
         /// Compare un emprunt aux emprunts préexistants dans la base de données et retourne une valeur booléenne 
         /// </summary>
-        /// <param name="emprunt"></param>
+        /// <param name="emprunt">emprunt devant être comparé et validé</param>
         /// <returns></returns>
         private async Task<bool> EmpruntSimilaireExiste(Emprunt emprunt)
         {

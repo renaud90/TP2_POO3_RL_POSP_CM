@@ -1,24 +1,27 @@
-using Bibliotheques.ApplicationCore.Entites;
+//using Bibliotheques.ApplicationCore.Entites;
+//using Microsoft.AspNetCore.HttpsPolicy;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.Extensions.Logging;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text.Json.Serialization;
+//using System.Threading.Tasks;
 using Bibliotheques.ApplicationCore.Interfaces;
 using Bibliotheques.ApplicationCore.Services;
+using Bibliotheques.Infrastructure.Repositories;
+using Bibliotheques.Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using Bibliotheques.Infrastructure.Repositories;
-using Bibliotheques.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using System.IO;
 using Newtonsoft.Json;
+
 
 namespace Bibliotheques.API
 {
@@ -46,7 +49,28 @@ namespace Bibliotheques.API
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Bibliotheques.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    
+                    Title = "API de gestion des emprunts de la bibliothèque Lipajoli", 
+                    Version = "v1",
+                    Description = "Système permettant de créer, modifier, supprimer et consultater des emprunts de livres",
+                    License = new OpenApiLicense
+                    {
+                        Name = "Apache 2.0",
+                        Url = new Uri("http://www.apache.org")
+                    },
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Pierre-Renaud Rousseau",
+                        Email = "prr@lipajoli.com",
+                        Url = new Uri("https://bibliolipajoli.com/")
+                    }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
         }

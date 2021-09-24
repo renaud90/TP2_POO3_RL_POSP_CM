@@ -37,7 +37,7 @@ namespace Bibliotheques.API.Controllers
         /// <summary>
         /// Premet l'obtention et le retour des informations d'un usager spécifique, ciblé par l'id passé en paramètre
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">id de l'usager à retourner</param>
         /// <returns></returns>
         /// <remarks>Pas de remarques</remarks>  
         /// <response code="200">L'usager spécifié a été trouvé et retourné</response>

@@ -35,7 +35,7 @@ namespace Bibliotheques.API.Controllers
         /// <summary>
         /// Premet l'obtention et le retour des informations d'un livre spécifique, ciblé par l'id passé en paramètre
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">id du livre à retourner</param>
         /// <returns></returns>
         /// <remarks>Pas de remarques</remarks>  
         /// <response code="200">Le livre spécifié a été trouvé et retourné</response>
