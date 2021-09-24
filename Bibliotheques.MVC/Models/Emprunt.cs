@@ -19,7 +19,7 @@ namespace Bibliotheques.MVC.Models
         [Display(Name = "Date de l'emprunt")]
         public DateTime DateEmprunt { get; set; }
 
-        [Display(Name = "Date d'échéance")]
+        [Display(Name = "Date de retour")]
         public DateTime DateRetour { get; set; }
 
         public virtual Livre Livre { get; set; }
